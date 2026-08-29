@@ -6,8 +6,8 @@ import math
 import random
 from dataclasses import dataclass, field
 
-from nyc_world.pathfinding import astar, path_to_world
-from nyc_world.streets import StreetNetwork
+from nyc_world.city.pathfinding import astar, path_to_world
+from nyc_world.city.streets import StreetNetwork
 
 TAXI = "taxi"
 CAR = "car"

@@ -7,9 +7,9 @@ import argparse
 
 import _bootstrap  # noqa: F401
 
-from nyc_world.areas import AREAS, GREENWICH_VILLAGE
-from nyc_world.map_generator import generate_map
-from nyc_world.osm_fetch import fetch_osm
+from nyc_world.core.areas import AREAS, GREENWICH_VILLAGE
+from nyc_world.map.map_generator import generate_map
+from nyc_world.map.osm_fetch import fetch_osm
 from nyc_world.paths import DEFAULT_MAP_PATH, DEFAULT_META_PATH
 
 DEFAULT_TILE_SIZE = 16

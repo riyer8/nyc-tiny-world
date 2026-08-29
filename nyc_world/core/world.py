@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pygame
 
-from nyc_world.projection import GeoProjection
-from nyc_world.sprites import ALL_TILES, PLAYER_SPAWN, SOLID_TILES, SIDEWALK, TileSprites
+from nyc_world.core.projection import GeoProjection
+from nyc_world.core.sprites import ALL_TILES, PLAYER_SPAWN, SOLID_TILES, SIDEWALK, TileSprites
 
 
 class World:

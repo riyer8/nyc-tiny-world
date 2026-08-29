@@ -6,10 +6,10 @@ import math
 import random
 from dataclasses import dataclass, field
 
-from nyc_world.landmarks import CAFE, LANDMARK, PARK, STORE, SUBWAY, Landmark3D
-from nyc_world.pathfinding import astar, path_to_world
-from nyc_world.streets import StreetNetwork
-from nyc_world.world_clock import WorldClock
+from nyc_world.city.landmarks import CAFE, LANDMARK, PARK, STORE, SUBWAY, Landmark3D
+from nyc_world.city.pathfinding import astar, path_to_world
+from nyc_world.city.streets import StreetNetwork
+from nyc_world.city.world_clock import WorldClock
 
 
 @dataclass

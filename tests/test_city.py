@@ -2,11 +2,11 @@
 
 import pytest
 
-from nyc_world.city_sim import CitySimulation
-from nyc_world.landmarks import CAFE, LANDMARK, STORE, load_landmarks_for_area
+from nyc_world.city import CitySimulation
+from nyc_world.city.landmarks import CAFE, LANDMARK, STORE, load_landmarks_for_area
+from nyc_world.city.world_clock import Weather, WorldClock
+from nyc_world.core import GeoProjection
 from nyc_world.paths import DEFAULT_META_PATH
-from nyc_world.projection import GeoProjection
-from nyc_world.world_clock import Weather, WorldClock
 
 
 @pytest.fixture
@@ -42,4 +42,10 @@ def test_city_simulation(projection: GeoProjection) -> None:
     assert len(city.npcs) == 8
     assert len(city.vehicles) == 6
     city.update(1.0)
+    assert city.clock.minute > 0 or city.clock.hour > 8
+
+
+def test_city_sprint_speed_multiplier(projection: GeoProjection) -> None:
+    city = CitySimulation(projection, 500, 500, npc_count=2, vehicle_count=2)
+    city.update(1.0, speed_multiplier=2.5)
     assert city.clock.minute > 0 or city.clock.hour > 8

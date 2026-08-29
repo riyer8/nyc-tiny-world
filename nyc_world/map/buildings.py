@@ -9,9 +9,9 @@ from pathlib import Path
 
 from shapely.geometry import LineString, Polygon
 
-from nyc_world.map_generator import OsmIndex
+from nyc_world.core.projection import GeoProjection
+from nyc_world.map.map_generator import OsmIndex
 from nyc_world.paths import DATA_DIR
-from nyc_world.projection import GeoProjection
 
 METERS_PER_STORY = 3.5
 MIN_HEIGHT = 3.0

@@ -1,7 +1,6 @@
 """Tests for geographic projection."""
 
-from nyc_world.areas import GREENWICH_VILLAGE
-from nyc_world.projection import GeoProjection
+from nyc_world.core import GREENWICH_VILLAGE, GeoProjection
 
 
 def test_round_trip() -> None:

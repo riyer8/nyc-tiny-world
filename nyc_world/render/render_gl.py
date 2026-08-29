@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import math
 
-from nyc_world.buildings import Building3D
-from nyc_world.landmarks import CAFE, LANDMARK, PARK, STORE, SUBWAY, Landmark3D
-from nyc_world.npcs import NPC
-from nyc_world.streets import Quad, StreetScene, TrafficLight3D
-from nyc_world.vehicles import BIKE, BUS, CAR, TAXI, Vehicle
-from nyc_world.world_3d import Box3D
-from nyc_world.world_clock import WorldClock
+from nyc_world.map.buildings import Building3D
+from nyc_world.city.landmarks import CAFE, LANDMARK, PARK, STORE, SUBWAY, Landmark3D
+from nyc_world.city.npcs import NPC
+from nyc_world.city.streets import Quad, StreetScene, TrafficLight3D
+from nyc_world.city.vehicles import BIKE, BUS, CAR, TAXI, Vehicle
+from nyc_world.core.world_3d import Box3D
+from nyc_world.city.world_clock import WorldClock
 
 
 def setup_gl(width: int, height: int, fov: float = 70.0) -> None:
@@ -90,7 +90,7 @@ def draw_streets(scene: StreetScene, brightness: float = 1.0) -> None:
 
 
 def draw_traffic_light(light: TrafficLight3D, brightness: float = 1.0) -> None:
-    from nyc_world.world_3d import Box3D
+    from nyc_world.core.world_3d import Box3D
     draw_box(Box3D(light.x, light.height / 2, light.z, 0.2, light.height, 0.2,
                    0.35 * brightness, 0.36 * brightness, 0.38 * brightness))
     draw_box(Box3D(light.x, light.height - 0.3, light.z, 0.35, 0.5, 0.2,
@@ -191,6 +191,27 @@ def draw_vehicle(vehicle: Vehicle, brightness: float = 1.0) -> None:
         draw_box(Box3D(vehicle.x, 0.6, vehicle.z, 1.8, 1.2, 3.5, r * brightness, g * brightness, b * brightness))
     if vehicle.kind == TAXI:
         draw_box(Box3D(vehicle.x, 1.3, vehicle.z, 1.6, 0.3, 3.2, 0.95 * brightness, 0.85 * brightness, 0.1 * brightness))
+
+
+def render_interior_frame(
+    interior_boxes: list[Box3D],
+    px: float,
+    py: float,
+    pz: float,
+    yaw: float,
+    pitch: float,
+) -> None:
+    """Render a simple interior room instead of the city."""
+    from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear, glClearColor, glLoadIdentity, glRotatef, glTranslatef
+
+    glClearColor(0.35, 0.32, 0.30, 1.0)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+    glRotatef(math.degrees(pitch), 1, 0, 0)
+    glRotatef(math.degrees(yaw), 0, 1, 0)
+    glTranslatef(-px, -py, -pz)
+    for box in interior_boxes:
+        draw_box(box)
 
 
 def render_frame(

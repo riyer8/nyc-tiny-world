@@ -6,8 +6,9 @@ import sys
 import _bootstrap  # noqa: F401
 import pygame
 
+from nyc_world.core import World
+from nyc_world.game import CONTROLS_HELP, movement_delta_2d, read_movement
 from nyc_world.paths import DEFAULT_MAP_PATH
-from nyc_world.world import World
 
 FPS = 60
 TILE_SIZE = 16
@@ -38,9 +39,18 @@ def draw_player(surface: pygame.Surface, x: int, y: int, size: int) -> None:
     pygame.draw.line(surface, PLAYER_COLOR, (x, y + head_r), (x + head_r * 2, y + head_r * 3), 2)
 
 
-def draw_hud(surface: pygame.Surface, world: World, player_x: float, player_y: float) -> None:
+def draw_hud(
+    surface: pygame.Surface,
+    world: World,
+    player_x: float,
+    player_y: float,
+    *,
+    sprinting: bool = False,
+) -> None:
     font = pygame.font.SysFont("Menlo", 13)
     lines = [f"game  x={player_x:.0f}  y={player_y:.0f}"]
+    if sprinting:
+        lines.append("mode  SPRINT (Space)")
     if world.projection:
         lat, lon = world.projection.to_gps(player_x, player_y)
         lines.append(f"GPS   {lat:.5f}, {lon:.5f}")
@@ -50,6 +60,10 @@ def draw_hud(surface: pygame.Surface, world: World, player_x: float, player_y: f
         surface.blit(font.render(line, True, HUD_SHADOW), (9, y + 1))
         surface.blit(font.render(line, True, HUD_COLOR), (8, y))
         y += 18
+
+    help_font = pygame.font.SysFont("Menlo", 11)
+    help_surf = help_font.render(CONTROLS_HELP, True, (170, 175, 185))
+    surface.blit(help_surf, (8, VIEWPORT_H - 18))
 
 
 def try_move(world: World, x: float, y: float, dx: float, dy: float) -> tuple[float, float]:
@@ -74,6 +88,7 @@ def main() -> None:
     if world.projection:
         title += f" — {world.projection.area_name}"
     pygame.display.set_caption(title)
+    print(CONTROLS_HELP)
 
     player_x, player_y = world.player_spawn
     clock = pygame.time.Clock()
@@ -87,21 +102,9 @@ def main() -> None:
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
 
-        keys = pygame.key.get_pressed()
-        dx = dy = 0
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            dy -= 1
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            dy += 1
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            dx -= 1
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            dx += 1
-
+        movement = read_movement(pygame.key.get_pressed())
+        dx, dy = movement_delta_2d(movement, PLAYER_SPEED, dt)
         if dx or dy:
-            length = (dx * dx + dy * dy) ** 0.5
-            dx = dx / length * PLAYER_SPEED * dt
-            dy = dy / length * PLAYER_SPEED * dt
             player_x, player_y = try_move(world, player_x, player_y, dx, dy)
 
         cam_x = max(0, min(max(0, world.width_px - VIEWPORT_W), int(player_x - VIEWPORT_W // 2)))
@@ -110,7 +113,7 @@ def main() -> None:
         screen.fill((30, 30, 35))
         world.draw(screen, cam_x, cam_y)
         draw_player(screen, int(player_x - cam_x), int(player_y - cam_y), TILE_SIZE)
-        draw_hud(screen, world, player_x, player_y)
+        draw_hud(screen, world, player_x, player_y, sprinting=movement.sprint)
         pygame.display.flip()
 
     pygame.quit()

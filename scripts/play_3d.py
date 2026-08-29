@@ -8,16 +8,24 @@ import sys
 
 import _bootstrap  # noqa: F401
 import pygame
-from pygame.locals import DOUBLEBUF, K_ESCAPE, K_a, K_d, K_s, K_w, OPENGL, QUIT, RESIZABLE
+from pygame.locals import (
+    DOUBLEBUF,
+    K_ESCAPE,
+    K_e,
+    KEYDOWN,
+    OPENGL,
+    QUIT,
+    RESIZABLE,
+)
 
-from nyc_world.city_sim import CitySimulation
+from nyc_world.city import CitySimulation
+from nyc_world.core import EYE_HEIGHT, World, World3D
+from nyc_world.game import CONTROLS_HELP, GameSession, world_speed_multiplier
+from nyc_world.game.controls import movement_delta_3d, read_movement
 from nyc_world.paths import DEFAULT_MAP_PATH
-from nyc_world.render_gl import render_frame, setup_gl
-from nyc_world.world import World
-from nyc_world.world_3d import EYE_HEIGHT, World3D
+from nyc_world.render import draw_hud, render_frame, render_interior_frame, setup_gl
 
 FPS = 60
-MOVE_SPEED = 6.0
 MOUSE_SENS = 0.0025
 
 
@@ -42,9 +50,13 @@ def main() -> None:
     pitch = 0.0
 
     city: CitySimulation | None = None
+    session: GameSession | None = None
     if world.projection:
         city = CitySimulation(world.projection, px, pz)
+        session = GameSession(city, px, pz)
         print(f"City loaded: {city.summary()}")
+        print("Quest: Walk to Maya (pink NPC near spawn) and press E to start.")
+        print(CONTROLS_HELP)
 
     clock = pygame.time.Clock()
     running = True
@@ -55,8 +67,14 @@ def main() -> None:
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN and event.key == K_ESCAPE:
-                running = False
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+                elif event.key == K_e and session:
+                    new_pos = session.press_interact(px, pz)
+                    if new_pos:
+                        px, pz = new_pos
+                        prev_x, prev_z = px, pz
             elif event.type == pygame.VIDEORESIZE:
                 width, height = event.size
                 screen = pygame.display.set_mode(
@@ -64,56 +82,64 @@ def main() -> None:
                 )
                 setup_gl(width, height)
 
-        if city:
-            city.update(dt)
+        keys = pygame.key.get_pressed()
+        movement = read_movement(keys)
+        in_interior = session is not None and session.in_interior
+
+        if city and not in_interior:
+            city.update(dt, speed_multiplier=world_speed_multiplier(movement.sprint))
 
         mx, my = pygame.mouse.get_rel()
         yaw -= mx * MOUSE_SENS
         pitch -= my * MOUSE_SENS
         pitch = max(-1.4, min(1.4, pitch))
 
-        keys = pygame.key.get_pressed()
-        move_x = move_z = 0.0
-        if keys[K_w]:
-            move_x += math.sin(yaw)
-            move_z += math.cos(yaw)
-        if keys[K_s]:
-            move_x -= math.sin(yaw)
-            move_z -= math.cos(yaw)
-        if keys[K_a]:
-            move_x -= math.cos(yaw)
-            move_z += math.sin(yaw)
-        if keys[K_d]:
-            move_x += math.cos(yaw)
-            move_z -= math.sin(yaw)
-
+        move_x, move_z = movement_delta_3d(movement, yaw, dt=dt)
         if move_x or move_z:
-            length = math.hypot(move_x, move_z)
-            move_x = move_x / length * MOVE_SPEED * dt
-            move_z = move_z / length * MOVE_SPEED * dt
             new_x = px + move_x
             new_z = pz + move_z
-            px, pz = world3d.resolve_move(prev_x, prev_z, new_x, new_z)
+            if in_interior and session:
+                px, pz = session.clamp_interior(new_x, new_z)
+            else:
+                px, pz = world3d.resolve_move(prev_x, prev_z, new_x, new_z)
             prev_x, prev_z = px, pz
 
         py = EYE_HEIGHT
-        sim_clock = city.clock if city else None
-        from nyc_world.world_clock import WorldClock
+        from nyc_world.city.world_clock import WorldClock
 
-        render_frame(
-            clock=sim_clock or WorldClock(),
-            streets=city.street_scene if city else None,
-            buildings=world3d.buildings,
-            landmarks=city.landmarks if city else [],
-            props=world3d.boxes,
-            npcs=city.npcs if city else [],
-            vehicles=city.vehicles if city else [],
-            px=px,
-            py=py,
-            pz=pz,
-            yaw=yaw,
-            pitch=pitch,
-        )
+        sim_clock = city.clock if city else None
+
+        if in_interior and session and session.current_interior:
+            render_interior_frame(
+                session.current_interior.build_boxes(),
+                px,
+                py,
+                pz,
+                yaw,
+                pitch,
+            )
+        else:
+            render_frame(
+                clock=sim_clock or WorldClock(),
+                streets=city.street_scene if city else None,
+                buildings=world3d.buildings,
+                landmarks=city.landmarks if city else [],
+                props=world3d.boxes,
+                npcs=city.npcs if city else [],
+                vehicles=city.vehicles if city else [],
+                px=px,
+                py=py,
+                pz=pz,
+                yaw=yaw,
+                pitch=pitch,
+            )
+
+        if session:
+            session.update(px, pz)
+            session.hud.controls_hint = CONTROLS_HELP
+            session.hud.sprinting = movement.sprint
+            draw_hud(width, height, session.hud)
+
         pygame.display.flip()
 
         if world.projection and city:
@@ -121,8 +147,11 @@ def main() -> None:
             gy = (world.rows - pz / world3d.meters_per_tile) * world.tile_size
             lat, lon = world.projection.to_gps(gx, gy)
             weather = city.clock.weather.value
+            quest = session.quest_summary() if session else ""
+            speed = "SPRINT" if movement.sprint else "walk"
             pygame.display.set_caption(
-                f"NYC Tiny World — {city.clock.time_str} {weather} — {lat:.5f}, {lon:.5f}"
+                f"NYC Tiny World — {city.clock.time_str} {weather} — {speed} — "
+                f"{lat:.5f}, {lon:.5f} — {quest}"
             )
 
     pygame.quit()

@@ -15,7 +15,7 @@ import math
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from nyc_world.areas import Area
+from nyc_world.core.areas import Area
 
 METERS_PER_DEGREE_LAT = 111_320.0
 

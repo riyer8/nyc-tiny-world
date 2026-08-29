@@ -7,7 +7,7 @@ from pathlib import Path
 
 import requests
 
-from nyc_world.areas import Area
+from nyc_world.core.areas import Area
 from nyc_world.paths import DATA_DIR
 
 OVERPASS_URLS = [

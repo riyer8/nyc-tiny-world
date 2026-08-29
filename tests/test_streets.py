@@ -1,13 +1,11 @@
 """Tests for street network and pathfinding."""
 
-import json
-
 import pytest
 
-from nyc_world.pathfinding import astar, build_adjacency, set_astar_positions
+from nyc_world.city.pathfinding import astar, build_adjacency, set_astar_positions
+from nyc_world.city.streets import load_street_network
+from nyc_world.core import GeoProjection
 from nyc_world.paths import DATA_DIR, DEFAULT_META_PATH
-from nyc_world.projection import GeoProjection
-from nyc_world.streets import load_street_network
 
 
 @pytest.fixture

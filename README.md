@@ -12,7 +12,38 @@ python3 scripts/generate_map.py    # first time: download OSM + build map
 python3 scripts/play_3d.py         # walk the living 3D city
 ```
 
-**Controls:** WASD move · mouse look · Esc quit
+**Controls**
+
+| Action | Keys |
+|--------|------|
+| Move forward | **W** or **↑** |
+| Move backward | **S** or **↓** |
+| Strafe left / right | **A** / **D** or **←** / **→** |
+| Sprint (you + city traffic) | **Space** (hold) |
+| Look around | Mouse |
+| Interact | **E** |
+| Quit | **Esc** |
+
+Controls also appear in the HUD at the bottom of the screen while playing.
+
+## Interactions & quests
+
+Walk up to subway entrances, cafes, buildings, NPCs, and objects. When you're close enough, a prompt appears — press **E** to interact.
+
+**Example quest: The Missing Camera**
+1. Talk to **Maya** (pink NPC near Washington Square spawn)
+2. Visit the **Village Cafe** (nearest cafe landmark)
+3. Talk to **Alex** for a clue
+4. Enter the **Jefferson Market Library**
+5. Find the camera inside
+6. Return to Maya
+
+Quest progress shows in the top-left HUD. Dialogue appears at the bottom. A few buildings have simple interiors (cafe, library, photo shop).
+
+**Testing without the 3D window:**
+```bash
+pytest tests/test_interactions.py tests/test_quests.py -v
+```
 
 ## What's in the world
 
@@ -24,18 +55,18 @@ python3 scripts/play_3d.py         # walk the living 3D city
 | NPCs | 24 pedestrians with daily schedules (A* on street graph) |
 | Vehicles | Taxis, cars, buses, bikes on the road network |
 | Time & weather | Clock (starts 8:00 AM), sunrise/sunset, rain, fog, clouds |
+| Interactions | E to interact with landmarks, NPCs, objects |
+| Quests | Adventure system with objectives, dialogue, rewards |
 
 ## Project layout
 
 ```
-nyc_world/       game engine
-  streets.py     road graph + 3D street geometry
-  buildings.py   extruded OSM footprints
-  landmarks.py   recognizable POI models
-  npcs.py        scheduled pedestrians
-  vehicles.py    road-following traffic
-  world_clock.py time + weather
-  city_sim.py    ties it all together
+nyc_world/
+  core/          world map, projection, 3D scene
+  map/           OSM fetch, map generation, buildings
+  city/          streets, landmarks, NPCs, vehicles, simulation
+  game/          controls, interactions, quests, session
+  render/        OpenGL scene + HUD
 scripts/         play_3d.py, play_2d.py, generate_map.py
 tests/           pytest suite
 data/            cached OSM JSON

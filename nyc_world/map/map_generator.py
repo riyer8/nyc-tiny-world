@@ -7,9 +7,9 @@ from dataclasses import dataclass
 
 from shapely.geometry import LineString, Polygon
 
-from nyc_world.areas import Area
-from nyc_world.projection import GeoProjection
-from nyc_world.sprites import (
+from nyc_world.core.areas import Area
+from nyc_world.core.projection import GeoProjection
+from nyc_world.core.sprites import (
     BUILDING,
     PARK,
     PLAYER_SPAWN,

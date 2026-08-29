@@ -6,11 +6,11 @@ import json
 import math
 from dataclasses import dataclass, field
 
-from nyc_world.buildings import lonlat_to_world_xz
-from nyc_world.map_generator import OsmIndex
+from nyc_world.map.buildings import lonlat_to_world_xz
+from nyc_world.map.map_generator import OsmIndex
 from nyc_world.paths import DATA_DIR
-from nyc_world.pathfinding import build_adjacency, set_astar_positions
-from nyc_world.projection import GeoProjection
+from nyc_world.city.pathfinding import build_adjacency, set_astar_positions
+from nyc_world.core.projection import GeoProjection
 
 ROAD_WIDTH_M: dict[str, float] = {
     "motorway": 12.0,

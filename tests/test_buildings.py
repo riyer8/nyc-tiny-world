@@ -1,17 +1,16 @@
 """Tests for building height estimation and OSM loading."""
 
 import json
-from pathlib import Path
 
 import pytest
 
-from nyc_world.buildings import (
+from nyc_world.core import GeoProjection
+from nyc_world.map.buildings import (
     estimate_height_m,
     load_buildings,
     load_buildings_for_area,
 )
 from nyc_world.paths import DATA_DIR, DEFAULT_META_PATH
-from nyc_world.projection import GeoProjection
 
 OSM_PATH = DATA_DIR / "greenwich_village_osm.json"
 

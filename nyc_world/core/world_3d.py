@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from nyc_world.buildings import Building3D, load_buildings_for_area
-from nyc_world.sprites import PARK, TREE
-from nyc_world.world import World
+from nyc_world.core.sprites import PARK, TREE
+from nyc_world.core.world import World
+
+if TYPE_CHECKING:
+    from nyc_world.map.buildings import Building3D
 
 EYE_HEIGHT = 1.7
 PLAYER_RADIUS = 0.6
@@ -35,6 +38,8 @@ class World3D:
     """Turn a tile map into 3D geometry + grid collision."""
 
     def __init__(self, world: World) -> None:
+        from nyc_world.map.buildings import load_buildings_for_area
+
         self.world = world
         if world.projection:
             self.meters_per_tile = world.projection.meters_per_tile()

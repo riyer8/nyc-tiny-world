@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from nyc_world.buildings import lonlat_to_world_xz
-from nyc_world.map_generator import OsmIndex
+from nyc_world.map.buildings import lonlat_to_world_xz
+from nyc_world.map.map_generator import OsmIndex
 from nyc_world.paths import DATA_DIR
-from nyc_world.projection import GeoProjection
+from nyc_world.core.projection import GeoProjection
 
 CAFE = "cafe"
 SUBWAY = "subway"

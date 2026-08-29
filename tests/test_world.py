@@ -2,11 +2,9 @@
 
 import pytest
 
+from nyc_world.core import World, World3D
+from nyc_world.core.sprites import BUILDING, ROAD
 from nyc_world.paths import DEFAULT_MAP_PATH, DEFAULT_META_PATH
-from nyc_world.projection import GeoProjection
-from nyc_world.sprites import BUILDING, ROAD
-from nyc_world.world import World
-from nyc_world.world_3d import World3D
 
 
 @pytest.fixture
