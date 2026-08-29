@@ -56,13 +56,7 @@ class Building3D:
     name: str = ""
 
 
-def lonlat_to_world_xz(projection: GeoProjection, lon: float, lat: float) -> tuple[float, float]:
-    game_x, game_y = projection.to_game(lat, lon)
-    mpt = projection.meters_per_tile()
-    x = game_x / projection.tile_size * mpt
-    row = game_y / projection.tile_size
-    z = (projection.rows - row) * mpt
-    return x, z
+from nyc_world.geo.coords import lonlat_to_world_xz
 
 
 def parse_meters(value: str) -> float:

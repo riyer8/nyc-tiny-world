@@ -8,11 +8,21 @@ from dataclasses import dataclass
 WALK_SPEED = 6.0
 SPRINT_MULTIPLIER = 2.5
 WORLD_SPEED_MULTIPLIER = 2.5
+JUMP_SPEED = 5.5
+GRAVITY = 18.0
+MAX_PITCH = 1.4
 
-CONTROLS_HELP = (
-    "Move: WASD or Arrow keys (W/↑ forward)  ·  Sprint: Space  ·  "
-    "Look: Mouse  ·  Interact: E  ·  Quit: Esc"
+CONTROLS_HELP_2D = (
+    "Move: WASD or Arrow keys (W/↑ forward)  ·  Sprint: F  ·  Quit: Esc"
 )
+
+CONTROLS_HELP_3D = (
+    "Move: WASD/Arrows (follows where you look)  ·  Sprint: F  ·  Jump: Space  ·  "
+    "Look: click, move mouse, click to lock  ·  Interact: E  ·  Esc: quit"
+)
+
+# Backward-compatible alias for 2D scripts.
+CONTROLS_HELP = CONTROLS_HELP_2D
 
 
 @dataclass(frozen=True)
@@ -36,9 +46,9 @@ def read_movement(keys) -> MovementInput:
     """Read WASD + arrow keys. Forward = W or Up arrow."""
     from pygame.locals import (
         K_DOWN,
+        K_f,
         K_LEFT,
         K_RIGHT,
-        K_SPACE,
         K_UP,
         K_a,
         K_d,
@@ -62,7 +72,63 @@ def read_movement(keys) -> MovementInput:
         forward /= length
         strafe /= length
 
-    return MovementInput(forward=forward, strafe=strafe, sprint=bool(keys[K_SPACE]))
+    return MovementInput(forward=forward, strafe=strafe, sprint=bool(keys[K_f]))
+
+
+@dataclass
+class MouseLook:
+    """Click-to-toggle first-person look."""
+
+    active: bool = False
+    sensitivity: float = 0.0025
+
+    def toggle(self) -> bool:
+        self.active = not self.active
+        return self.active
+
+    def apply(self, mx: float, my: float, yaw: float, pitch: float) -> tuple[float, float]:
+        if not self.active:
+            return yaw, pitch
+        yaw -= mx * self.sensitivity
+        pitch -= my * self.sensitivity
+        pitch = max(-MAX_PITCH, min(MAX_PITCH, pitch))
+        return yaw, pitch
+
+
+@dataclass
+class JumpState:
+    """Simple vertical jump for the 3D player."""
+
+    height: float = 0.0
+    velocity: float = 0.0
+    gravity: float = GRAVITY
+    jump_speed: float = JUMP_SPEED
+
+    @property
+    def on_ground(self) -> bool:
+        return self.height <= 0.0 and self.velocity <= 0.0
+
+    def start_jump(self) -> bool:
+        if not self.on_ground:
+            return False
+        self.velocity = self.jump_speed
+        return True
+
+    def update(self, dt: float) -> float:
+        if self.height > 0.0 or self.velocity > 0.0:
+            self.velocity -= self.gravity * dt
+            self.height += self.velocity * dt
+            if self.height < 0.0:
+                self.height = 0.0
+                self.velocity = 0.0
+        return self.height
+
+
+def camera_basis(yaw: float) -> tuple[tuple[float, float], tuple[float, float]]:
+    """Horizontal forward/right unit vectors matching the OpenGL camera."""
+    forward = (math.sin(yaw), -math.cos(yaw))
+    right = (math.cos(yaw), math.sin(yaw))
+    return forward, right
 
 
 def movement_delta_3d(
@@ -71,13 +137,14 @@ def movement_delta_3d(
     base_speed: float = WALK_SPEED,
     dt: float = 0.0,
 ) -> tuple[float, float]:
-    """Convert movement input to world-space (dx, dz) for first-person view."""
+    """Move relative to where the camera is facing (W/↑ = forward)."""
     if not movement.active:
         return 0.0, 0.0
 
     speed = base_speed * movement.speed_multiplier * dt
-    move_x = movement.forward * math.sin(yaw) + movement.strafe * math.cos(yaw)
-    move_z = movement.forward * math.cos(yaw) - movement.strafe * math.sin(yaw)
+    forward, right = camera_basis(yaw)
+    move_x = movement.forward * forward[0] + movement.strafe * right[0]
+    move_z = movement.forward * forward[1] + movement.strafe * right[1]
     length = math.hypot(move_x, move_z)
     if length == 0:
         return 0.0, 0.0

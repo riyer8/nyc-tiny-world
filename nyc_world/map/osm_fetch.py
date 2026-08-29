@@ -17,8 +17,7 @@ OVERPASS_URLS = [
 USER_AGENT = "nyc-tiny-world/1.0 (local game map generator)"
 
 
-def _overpass_query(area: Area) -> str:
-    south, west, north, east = area.bbox
+def _overpass_query_bbox(south: float, west: float, north: float, east: float) -> str:
     bbox = f"{south},{west},{north},{east}"
     return f"""[out:json][timeout:90];
 (
@@ -43,17 +42,28 @@ out body;
 out skel qt;"""
 
 
+def _overpass_query(area: Area) -> str:
+    south, west, north, east = area.bbox
+    return _overpass_query_bbox(south, west, north, east)
+
+
 def cache_path(area: Area) -> Path:
     return DATA_DIR / f"{area.slug}_osm.json"
 
 
-def fetch_osm(area: Area, *, refresh: bool = False) -> dict:
-    path = cache_path(area)
-    if path.exists() and not refresh:
-        return json.loads(path.read_text())
+def fetch_osm_bbox(
+    south: float,
+    west: float,
+    north: float,
+    east: float,
+    *,
+    cache_path: Path | None = None,
+    refresh: bool = False,
+) -> dict:
+    if cache_path and cache_path.exists() and not refresh:
+        return json.loads(cache_path.read_text())
 
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    query = _overpass_query(area)
+    query = _overpass_query_bbox(south, west, north, east)
     headers = {"User-Agent": USER_AGENT}
     last_error: Exception | None = None
 
@@ -67,10 +77,21 @@ def fetch_osm(area: Area, *, refresh: bool = False) -> dict:
             )
             response.raise_for_status()
             data = response.json()
-            path.write_text(json.dumps(data))
+            if cache_path:
+                cache_path.parent.mkdir(parents=True, exist_ok=True)
+                cache_path.write_text(json.dumps(data))
             return data
         except Exception as exc:
             last_error = exc
             continue
 
     raise RuntimeError("Failed to fetch OSM data from all Overpass mirrors") from last_error
+
+
+def fetch_osm(area: Area, *, refresh: bool = False) -> dict:
+    path = cache_path(area)
+    if path.exists() and not refresh:
+        return json.loads(path.read_text())
+
+    south, west, north, east = area.bbox
+    return fetch_osm_bbox(south, west, north, east, cache_path=path, refresh=refresh)

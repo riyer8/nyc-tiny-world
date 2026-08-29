@@ -8,10 +8,11 @@ from nyc_world.city.streets import StreetNetwork, load_street_network
 from nyc_world.city.vehicles import spawn_vehicles
 from nyc_world.city.world_clock import WorldClock
 from nyc_world.core.projection import GeoProjection
+from nyc_world.simulation.npc_mind import NPCMindRegistry
 
 
 class CitySimulation:
-    """Streets, landmarks, NPCs, vehicles, and time/weather."""
+    """Streets, landmarks, NPCs, vehicles, time/weather, and NPC cognition."""
 
     def __init__(
         self,
@@ -21,9 +22,12 @@ class CitySimulation:
         *,
         npc_count: int = 24,
         vehicle_count: int = 18,
+        mind_registry: NPCMindRegistry | None = None,
     ) -> None:
         self.projection = projection
         self.clock = WorldClock(hour=8, minute=0)
+        self.mind_registry = mind_registry or NPCMindRegistry()
+        self.mind_registry.register_quest_npcs()
         self.streets: StreetNetwork | None = load_street_network(projection)
         self.landmarks = load_landmarks_for_area(projection)
 
@@ -43,11 +47,22 @@ class CitySimulation:
             return
         game_minutes = self.clock.hour * 60 + self.clock.minute + self.clock.minute / 60.0
         for npc in self.npcs:
-            if self.clock.is_raining and npc.personality == "commuter":
+            mind = self.mind_registry.get(npc.name)
+            if mind and self.clock.is_raining and mind.hates_rain:
+                npc.speed = max(0.9, npc.speed * 0.95)
+            elif self.clock.is_raining and npc.personality == "commuter":
                 npc.speed = max(1.0, npc.speed)
             npc.update(sim_dt, self.clock, self.streets, game_minutes)
         for vehicle in self.vehicles:
             vehicle.update(sim_dt, self.streets)
+
+        positions = {npc.name: (npc.x, npc.z) for npc in self.npcs}
+        self.mind_registry.update(
+            self.clock.hour,
+            self.clock.minute,
+            self.clock.is_raining,
+            positions,
+        )
 
     @property
     def street_scene(self):

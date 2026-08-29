@@ -77,7 +77,7 @@ def test_enter_library_and_collect_camera():
 
     system.update_player(8, 5)
     result = system.try_interact(8, 5)
-    assert "camera" in quests.inventory
+    assert quests.has_item("camera")
     assert quests.active_quest.objectives[4].completed
 
 
@@ -86,12 +86,15 @@ def test_return_camera_completes_quest():
     quests.start_quest("missing_camera")
     for obj in quests.quests["missing_camera"].objectives[:-1]:
         obj.completed = True
-    quests.inventory.add("camera")
+    quests.player.add_item("camera")
 
     system.update_player(10, 10)
     result = system.try_interact(10, 10)
     assert quests.quests["missing_camera"].state == QuestState.COMPLETED
     assert any("QUEST COMPLETE" in line for line in result.lines)
+    assert quests.player.has_item("coffee")
+    assert quests.player.xp == 75
+    assert quests.player.money == 52
 
 
 def test_missing_camera_quest_structure():

@@ -6,7 +6,7 @@ import json
 import math
 from dataclasses import dataclass, field
 
-from nyc_world.map.buildings import lonlat_to_world_xz
+from nyc_world.geo.coords import lonlat_to_world_xz
 from nyc_world.map.map_generator import OsmIndex
 from nyc_world.paths import DATA_DIR
 from nyc_world.city.pathfinding import build_adjacency, set_astar_positions
@@ -83,12 +83,31 @@ class StreetScene:
 
 
 @dataclass
+class NamedStreetSegment:
+    name: str
+    highway: str
+    x0: float
+    z0: float
+    x1: float
+    z1: float
+
+
+@dataclass
 class StreetNetwork:
     positions: dict[int, tuple[float, float]]
     walk_graph: dict[int, list[tuple[int, float]]]
     drive_graph: dict[int, list[tuple[int, float]]]
     scene: StreetScene
     intersection_nodes: set[int]
+    named_segments: list[NamedStreetSegment] = field(default_factory=list)
+
+
+def _street_name(tags: dict) -> str | None:
+    for key in ("name", "name:en", "official_name", "alt_name", "ref"):
+        value = tags.get(key)
+        if value:
+            return str(value)
+    return None
 
 
 def _perp(dx: float, dz: float, length: float) -> tuple[float, float]:
@@ -140,10 +159,13 @@ def build_street_network(projection: GeoProjection, osm_data: dict) -> StreetNet
     drive_edges: list[tuple[int, int, float]] = []
     node_highways: dict[int, set[str]] = {}
 
+    named_segments: list[NamedStreetSegment] = []
     for way in index.ways.values():
         highway = way.get("tags", {}).get("highway")
         if not highway:
             continue
+        tags = way.get("tags", {})
+        street_name = _street_name(tags)
         node_ids = [n for n in way.get("nodes", []) if n in index.nodes]
         if len(node_ids) < 2:
             continue
@@ -190,6 +212,11 @@ def build_street_network(projection: GeoProjection, osm_data: dict) -> StreetNet
                     )
                     dist += MARKING_SPACING * 2
 
+            if street_name:
+                named_segments.append(
+                    NamedStreetSegment(street_name, highway, x0, z0, x1, z1)
+                )
+
     intersection_nodes: set[int] = set()
     for nid, types in node_highways.items():
         if len(types) >= 2 or any(t in DRIVEABLE for t in types):
@@ -220,6 +247,7 @@ def build_street_network(projection: GeoProjection, osm_data: dict) -> StreetNet
         drive_graph=drive_graph,
         scene=scene,
         intersection_nodes=intersection_nodes,
+        named_segments=named_segments,
     )
 
 

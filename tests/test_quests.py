@@ -6,10 +6,17 @@ from nyc_world.game import GameSession, INTERIOR_SPAWN
 from nyc_world.game.quests import QuestState
 
 
+from nyc_world.city.world_clock import WorldClock
+from nyc_world.simulation.npc_mind import NPCMindRegistry
+
+
 class _FakeCity:
     def __init__(self):
         self.landmarks = []
         self.npcs = []
+        self.vehicles = []
+        self.mind_registry = NPCMindRegistry()
+        self.clock = WorldClock()
 
 
 def _make_session() -> GameSession:
@@ -25,11 +32,14 @@ def _make_session() -> GameSession:
 
 def test_session_starts_quest_with_maya():
     session = _make_session()
+    assert session.player.has_item("metro_card")
+    assert session.player.money == 37
     maya_x = session.city.npcs[0].x
     maya_z = session.city.npcs[0].z
     session.press_interact(maya_x, maya_z)
     assert session.quests.active_quest is not None
     assert session.hud.dialogue_lines
+    assert session.hud.profile_lines
 
 
 def test_session_enters_and_exits_interior():

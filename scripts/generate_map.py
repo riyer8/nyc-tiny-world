@@ -4,10 +4,11 @@
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 
 import _bootstrap  # noqa: F401
 
-from nyc_world.core.areas import AREAS, GREENWICH_VILLAGE
+from nyc_world.core.areas import AREAS, WASHINGTON_SQUARE
 from nyc_world.map.map_generator import generate_map
 from nyc_world.map.osm_fetch import fetch_osm
 from nyc_world.paths import DEFAULT_MAP_PATH, DEFAULT_META_PATH
@@ -21,9 +22,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--area",
-        default=GREENWICH_VILLAGE.slug,
+        default=WASHINGTON_SQUARE.slug,
         choices=sorted(AREAS),
-        help="Area to import (default: greenwich_village)",
+        help="Area to import (default: washington_square)",
     )
     parser.add_argument("--cols", type=int, default=80, help="Map width in tiles")
     parser.add_argument("--rows", type=int, default=80, help="Map height in tiles")
@@ -33,8 +34,8 @@ def main() -> None:
         default=DEFAULT_TILE_SIZE,
         help="Pixels per tile",
     )
-    parser.add_argument("--output", type=DEFAULT_MAP_PATH, help="Output map file")
-    parser.add_argument("--meta", type=DEFAULT_META_PATH, help="Projection metadata file")
+    parser.add_argument("--output", type=Path, default=DEFAULT_MAP_PATH, help="Output map file")
+    parser.add_argument("--meta", type=Path, default=DEFAULT_META_PATH, help="Projection metadata file")
     parser.add_argument("--refresh", action="store_true", help="Re-download OSM data")
     args = parser.parse_args()
 
