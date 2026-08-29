@@ -1,0 +1,13 @@
+{
+  "south": 40.7263,
+  "west": -74.0033,
+  "north": 40.7353,
+  "east": -73.9913,
+  "width_px": 1280,
+  "height_px": 1280,
+  "tile_size": 16,
+  "cols": 80,
+  "rows": 80,
+  "area_slug": "greenwich_village",
+  "area_name": "Greenwich Village"
+}
