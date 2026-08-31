@@ -35,5 +35,7 @@ def test_street_network_loads(projection: GeoProjection) -> None:
     streets = load_street_network(projection)
     assert streets is not None
     assert len(streets.scene.road_quads) > 100
+    assert len(streets.scene.sidewalk_quads) > len(streets.scene.road_quads)
+    assert len(streets.scene.curb_quads) > 0
     assert len(streets.walk_graph) > 50
     assert len(streets.drive_graph) > 50

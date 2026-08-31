@@ -19,19 +19,31 @@ class Weather(str, Enum):
 class WorldClock:
     hour: int = 8
     minute: int = 0
+    day: int = 1
     speed: float = 2.0  # game minutes per real second
     weather: Weather = Weather.CLEAR
     _weather_timer: float = field(default=0.0, repr=False)
+    _feed_weather_locked: bool = field(default=False, repr=False)
     _rng: random.Random = field(default_factory=lambda: random.Random(42), repr=False)
 
+    def set_feed_weather(self, weather: Weather) -> None:
+        self.weather = weather
+        self._feed_weather_locked = True
+
+    def clear_feed_weather(self) -> None:
+        self._feed_weather_locked = False
+
     def advance(self, dt: float) -> None:
-        total = self.hour * 60 + self.minute + dt * self.speed
+        prev_total = self.hour * 60 + self.minute
+        total = prev_total + dt * self.speed
+        if int(total // (24 * 60)) > int(prev_total // (24 * 60)):
+            self.day += 1
         total %= 24 * 60
         self.hour = int(total // 60)
         self.minute = int(total % 60)
 
         self._weather_timer += dt
-        if self._weather_timer > 120:
+        if not self._feed_weather_locked and self._weather_timer > 120:
             self._weather_timer = 0.0
             roll = self._rng.random()
             if roll < 0.15:

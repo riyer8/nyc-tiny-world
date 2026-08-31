@@ -11,6 +11,7 @@ def astar(
     goal: int,
     *,
     max_nodes: int = 50_000,
+    blocked_edges: set[tuple[int, int]] | None = None,
 ) -> list[int]:
     """Return node-id path from start to goal, or [] if unreachable."""
     if start == goal:
@@ -46,6 +47,10 @@ def astar(
         closed.add(current)
         expanded += 1
         for neighbor, cost in graph.get(current, []):
+            if blocked_edges:
+                edge = (min(current, neighbor), max(current, neighbor))
+                if edge in blocked_edges:
+                    continue
             if neighbor in closed:
                 continue
             tentative = g_score[current] + cost

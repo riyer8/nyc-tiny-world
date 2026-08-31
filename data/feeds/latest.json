@@ -1,0 +1,17 @@
+{
+  "weather": {
+    "condition": "rain",
+    "summary": "Rain expected at 5 PM (live forecast)",
+    "expected_hour": 17
+  },
+  "transit": [
+    {
+      "line": "F",
+      "delay_minutes": 15,
+      "summary": "F train delayed 15 min \u2014 crowds shifting to buses"
+    }
+  ],
+  "events": [],
+  "last_updated": "2026-08-30T12:00:00+00:00",
+  "source": "fixture"
+}

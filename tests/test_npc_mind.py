@@ -15,21 +15,27 @@ def test_maya_mind_profile():
 def test_player_helped_creates_memory():
     registry = NPCMindRegistry()
     registry.register(create_maya_mind())
+    registry.set_time_context(tick=1, game_day=1, game_time="08:00 AM")
     registry.on_player_helped("maya", "missing_camera")
     mind = registry.get("maya")
     assert mind is not None
     assert mind.has_memory("player_helped")
-    assert mind.player_affinity >= 0.5
+    rel = registry.relationships.get("maya")
+    assert rel.trust >= 60
+    assert rel.has_fact("quest_complete") or rel.has_fact("helped")
 
 
-def test_player_stole_reduces_affinity():
+def test_player_stole_reduces_trust():
     registry = NPCMindRegistry()
     registry.register(create_maya_mind())
-    registry.on_player_stole("maya", "camera")
+    registry.set_time_context(tick=1, game_day=1, game_time="08:00 AM")
+    registry.on_player_stole("maya", "coffee")
     mind = registry.get("maya")
     assert mind is not None
     assert mind.has_memory("player_stole")
-    assert mind.player_affinity < 0
+    rel = registry.relationships.get("maya")
+    assert rel.trust < 50
+    assert rel.has_fact("stole")
 
 
 def test_rain_lowers_mood_for_maya():

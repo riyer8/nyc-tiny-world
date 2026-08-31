@@ -22,6 +22,16 @@ VEHICLE_COLOR = {
     BIKE: (0.2, 0.7, 0.3),
 }
 
+CAR_COLORS = [
+    (0.75, 0.18, 0.16),
+    (0.18, 0.35, 0.72),
+    (0.12, 0.12, 0.14),
+    (0.90, 0.91, 0.93),
+    (0.55, 0.58, 0.62),
+    (0.22, 0.48, 0.32),
+    (0.68, 0.52, 0.18),
+]
+
 
 @dataclass
 class Vehicle:
@@ -62,7 +72,12 @@ class Vehicle:
         if len(nodes) < 2:
             return
         start, goal = random.sample(nodes, 2)
-        node_path = astar(streets.drive_graph, start, goal)
+        node_path = astar(
+            streets.drive_graph,
+            start,
+            goal,
+            blocked_edges=getattr(streets, "blocked_edges", None),
+        )
         if node_path:
             self.path = path_to_world(node_path, streets.positions)
             self.path_index = 0
@@ -70,11 +85,11 @@ class Vehicle:
 
 def spawn_vehicles(
     streets: StreetNetwork,
-    count: int = 18,
+    count: int = 32,
     seed: int = 99,
 ) -> list[Vehicle]:
     rng = random.Random(seed)
-    kinds = [TAXI, CAR, CAR, CAR, BUS, BIKE, BIKE]
+    kinds = [TAXI, CAR, CAR, CAR, CAR, BUS, BIKE, BIKE]
     vehicles: list[Vehicle] = []
     nodes = list(streets.positions.items())
     if not nodes:
@@ -83,13 +98,16 @@ def spawn_vehicles(
     for i in range(count):
         kind = kinds[i % len(kinds)]
         _, (x, z) = rng.choice(nodes)
-        vehicles.append(
-            Vehicle(
-                kind=kind,
-                x=x,
-                z=z,
-                speed=VEHICLE_SPEED[kind] * rng.uniform(0.85, 1.1),
-                color=VEHICLE_COLOR[kind],
-            )
+        color = VEHICLE_COLOR[kind]
+        if kind == CAR:
+            color = rng.choice(CAR_COLORS)
+        v = Vehicle(
+            kind=kind,
+            x=x,
+            z=z,
+            speed=VEHICLE_SPEED[kind] * rng.uniform(0.85, 1.1),
+            color=color,
         )
+        v._new_route(streets)
+        vehicles.append(v)
     return vehicles

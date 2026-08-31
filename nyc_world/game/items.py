@@ -23,7 +23,9 @@ ITEMS: dict[str, ItemDef] = {
     "metro_card": ItemDef("metro_card", "MetroCard", "🎫", "Swipe for the subway."),
     "camera": ItemDef("camera", "Camera", "📷", "Maya's missing camera."),
     "coffee": ItemDef("coffee", "Coffee", "☕", "A hot cup from the Village Cafe."),
+    "coffee_bag": ItemDef("coffee_bag", "Coffee Bag", "☕", "A bag of beans for Maya."),
     "coffee_token": ItemDef("coffee_token", "Coffee Token", "🎟️", "Redeem for a free drink."),
+    "library_clue": ItemDef("library_clue", "Library Clue", "📜", "A note found in the stacks."),
     "mysterious_key": ItemDef("mysterious_key", "Mysterious Key", "🗝️", "An old brass key. No label."),
 }
 

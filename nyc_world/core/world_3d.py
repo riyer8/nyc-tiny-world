@@ -126,7 +126,7 @@ class World3D:
             self.width_m,
             0.1,
             self.depth_m,
-            (0.28, 0.31, 0.27),
+            (0.76, 0.74, 0.70),
         )
 
         for row in range(self.world.rows):

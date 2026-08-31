@@ -41,11 +41,12 @@ def test_city_simulation(projection: GeoProjection) -> None:
     assert len(city.landmarks) > 0
     assert len(city.npcs) == 8
     assert len(city.vehicles) == 6
-    city.update(1.0)
+    assert len(city.agent_controller.brains) == 8
+    city.update(1.0, player_x=500, player_z=500)
     assert city.clock.minute > 0 or city.clock.hour > 8
 
 
 def test_city_sprint_speed_multiplier(projection: GeoProjection) -> None:
     city = CitySimulation(projection, 500, 500, npc_count=2, vehicle_count=2)
-    city.update(1.0, speed_multiplier=2.5)
+    city.update(1.0, speed_multiplier=2.5, player_x=500, player_z=500)
     assert city.clock.minute > 0 or city.clock.hour > 8

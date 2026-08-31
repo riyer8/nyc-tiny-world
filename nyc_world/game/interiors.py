@@ -38,6 +38,12 @@ class Interior:
             boxes.append(Box3D(6, 0.8, 5, 1.5, 1.6, 3, 0.32, 0.24, 0.14))
         elif self.id == "photo_shop_interior":
             boxes.append(Box3D(5, 1.0, 4, 6, 2, 2, 0.5, 0.5, 0.55))
+        elif self.id == "subway_car_interior":
+            for i in range(4):
+                boxes.append(Box3D(2.5 + i * 3.0, 0.45, 2.0, 2.2, 0.9, 0.8, 0.25, 0.35, 0.55))
+                boxes.append(Box3D(2.5 + i * 3.0, 0.45, 5.5, 2.2, 0.9, 0.8, 0.25, 0.35, 0.55))
+            boxes.append(Box3D(w / 2, 1.4, 0.2, w, 0.15, 0.3, 0.5, 0.5, 0.45))
+            boxes.append(Box3D(w / 2, 1.4, d - 0.2, w, 0.15, 0.3, 0.5, 0.5, 0.45))
 
         return boxes
 
@@ -55,6 +61,17 @@ INTERIORS: dict[str, Interior] = {
                 label="Exit",
                 radius=2.0,
                 emoji="🚪",
+            ),
+            Interactable(
+                id="coffee_bag_pickup",
+                kind=InteractableKind.OBJECT,
+                x=3,
+                z=2,
+                label="Coffee Bag",
+                radius=2.0,
+                item_id="coffee_bag",
+                dialogue_id="found_coffee_bag",
+                emoji="☕",
             ),
         ],
     ),
@@ -83,6 +100,28 @@ INTERIORS: dict[str, Interior] = {
                 dialogue_id="found_camera",
                 emoji="📷",
             ),
+            Interactable(
+                id="alex_note_clue",
+                kind=InteractableKind.OBJECT,
+                x=2,
+                z=6,
+                label="Folded Note",
+                radius=2.0,
+                item_id="alex_note",
+                dialogue_id="found_alex_note",
+                emoji="📝",
+            ),
+            Interactable(
+                id="library_clue_pickup",
+                kind=InteractableKind.OBJECT,
+                x=6,
+                z=3,
+                label="Scratched Shelf",
+                radius=2.0,
+                item_id="library_clue",
+                dialogue_id="found_library_clue",
+                emoji="🔍",
+            ),
         ],
     ),
     "photo_shop_interior": Interior(
@@ -99,6 +138,15 @@ INTERIORS: dict[str, Interior] = {
                 emoji="🚪",
             ),
         ],
+    ),
+    "subway_car_interior": Interior(
+        id="subway_car_interior",
+        name="Subway Car",
+        width=14.0,
+        depth=8.0,
+        wall_height=2.8,
+        floor_color=(0.35, 0.35, 0.38),
+        interactables=[],
     ),
 }
 

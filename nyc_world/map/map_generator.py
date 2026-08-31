@@ -176,6 +176,24 @@ class MapGenerator:
             self._fill_polygon(buffered, ROAD)
 
     def _draw_buildings(self) -> None:
+        """Paint building collision tiles, inset from the lot line so sidewalks stay walkable."""
+        inset_deg = self.projection.meters_to_degrees(1.2)
+
+        def _fill_building(poly: Polygon) -> None:
+            try:
+                shrunk = poly.buffer(-inset_deg)
+                if shrunk.is_valid and not shrunk.is_empty:
+                    if shrunk.geom_type == "Polygon":
+                        self._fill_polygon(shrunk, BUILDING)
+                    elif shrunk.geom_type == "MultiPolygon":
+                        for part in shrunk.geoms:
+                            self._fill_polygon(part, BUILDING)
+                elif poly.is_valid:
+                    self._fill_polygon(poly, BUILDING)
+            except Exception:
+                if poly.is_valid:
+                    self._fill_polygon(poly, BUILDING)
+
         for way in self.index.ways.values():
             if "building" not in way.get("tags", {}):
                 continue
@@ -185,7 +203,7 @@ class MapGenerator:
             try:
                 poly = Polygon(coords)
                 if poly.is_valid:
-                    self._fill_polygon(poly, BUILDING)
+                    _fill_building(poly)
             except Exception:
                 continue
 
@@ -193,7 +211,7 @@ class MapGenerator:
             if "building" not in relation.get("tags", {}):
                 continue
             for poly in self._relation_polygons(relation):
-                self._fill_polygon(poly, BUILDING)
+                _fill_building(poly)
 
     def _is_park_way(self, tags: dict) -> bool:
         return any(tags.get(k) == v for k, v in PARK_TAGS)
@@ -255,8 +273,9 @@ class MapGenerator:
     def generate(self, elements: list[dict]) -> GeneratedMap:
         self._elements = elements
         self._draw_parks()
-        self._draw_roads()
         self._draw_buildings()
+        # Roads after buildings so street tiles stay walkable (buildings must not block roads).
+        self._draw_roads()
         self._draw_pois()
         self._scatter_trees()
 

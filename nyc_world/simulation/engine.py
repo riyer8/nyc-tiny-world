@@ -6,6 +6,7 @@ from pathlib import Path
 
 from nyc_world.simulation.actions import Action, InteractAction, PlayerMoveAction, WaitAction
 from nyc_world.simulation.adapters import capture_world_state
+from nyc_world.simulation.event_log import EventLog
 from nyc_world.simulation.npc_mind import NPCMindRegistry
 from nyc_world.simulation.state import WorldState
 from nyc_world.simulation.trajectory import TrajectoryRecorder
@@ -21,6 +22,7 @@ class Simulation:
         quest_manager,
         *,
         minds: NPCMindRegistry | None = None,
+        event_log: EventLog | None = None,
         record_trajectories: bool = False,
         trajectory_dir: Path | None = None,
     ) -> None:
@@ -28,8 +30,10 @@ class Simulation:
         self.player = player_profile
         self.quests = quest_manager
         self.minds = minds or getattr(city, "mind_registry", None) or NPCMindRegistry()
+        self.event_log = event_log or EventLog()
         self.tick = 0
         self._building_count = 0
+        self.mystery = None
         self.recorder = TrajectoryRecorder(trajectory_dir) if record_trajectories else None
         if record_trajectories and self.recorder:
             self.recorder.open()
@@ -55,11 +59,29 @@ class Simulation:
             player_yaw=player_yaw,
             in_interior=in_interior,
             building_count=building_count,
+            event_count=len(self.event_log.entries),
+            mystery=self.mystery,
         )
 
-    def advance_world(self, dt: float, *, speed_multiplier: float = 1.0) -> None:
+    def advance_world(
+        self,
+        dt: float,
+        *,
+        speed_multiplier: float = 1.0,
+        time_scale: float = 1.0,
+    ) -> None:
         """Tick city clock, NPC movement, vehicles, and NPC minds."""
-        self.city.update(dt, speed_multiplier=speed_multiplier)
+        if time_scale <= 0.0:
+            return
+        mult = speed_multiplier * time_scale
+        self.city.update(dt, speed_multiplier=mult)
+        economy = getattr(self.city, "economy", None)
+        if economy:
+            economy.maybe_weekly_tick(
+                self.city.clock.day,
+                minds=self.minds,
+                event_log=self.event_log,
+            )
         positions = {npc.name: (npc.x, npc.z) for npc in self.city.npcs}
         self.minds.update(
             self.city.clock.hour,
@@ -85,6 +107,15 @@ class Simulation:
             mind = self.minds.get(action.target_id)
             if mind:
                 mind.remember("player_interacted", next_state.tick, action.target_id)
+            clock = self.city.clock
+            self.event_log.append(
+                tick=next_state.tick,
+                game_day=clock.day,
+                game_time=clock.time_str,
+                actor_id="player",
+                action="interact",
+                location_id=action.target_id,
+            )
         return next_state
 
     def step(

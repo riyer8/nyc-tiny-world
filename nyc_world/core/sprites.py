@@ -14,7 +14,7 @@ POI = "O"
 PLAYER_SPAWN = "P"
 
 ALL_TILES = frozenset({SIDEWALK, BUILDING, ROAD, TREE, LIGHT, CAR, PARK, POI})
-SOLID_TILES = frozenset({BUILDING, TREE, CAR, LIGHT})
+SOLID_TILES = frozenset({BUILDING, TREE})
 
 
 class TileSprites:

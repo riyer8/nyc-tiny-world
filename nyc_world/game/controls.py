@@ -17,8 +17,9 @@ CONTROLS_HELP_2D = (
 )
 
 CONTROLS_HELP_3D = (
-    "Move: WASD/Arrows (follows where you look)  ·  Sprint: F  ·  Jump: Space  ·  "
-    "Look: click, move mouse, click to lock  ·  Interact: E  ·  Esc: quit"
+    "Move: WASD/Arrows  ·  Sprint: F  ·  Jump: Space  ·  "
+    "Look: click + mouse  ·  Interact: E  ·  Twin: T  ·  Photo: P  ·  Imagine: I  ·  "
+    "God: ` or Shift+G  ·  Evolution: J  ·  Mystery: M  ·  Accuse: Y  ·  Subway: 1-6  ·  Esc: quit"
 )
 
 # Backward-compatible alias for 2D scripts.
@@ -77,10 +78,11 @@ def read_movement(keys) -> MovementInput:
 
 @dataclass
 class MouseLook:
-    """Click-to-toggle first-person look."""
+    """Click-to-toggle camera orbit (third-person)."""
 
     active: bool = False
     sensitivity: float = 0.0025
+    default_pitch: float = -0.28
 
     def toggle(self) -> bool:
         self.active = not self.active
@@ -91,7 +93,9 @@ class MouseLook:
             return yaw, pitch
         yaw -= mx * self.sensitivity
         pitch -= my * self.sensitivity
-        pitch = max(-MAX_PITCH, min(MAX_PITCH, pitch))
+        from nyc_world.render.camera import MAX_PITCH, MIN_PITCH
+
+        pitch = max(MIN_PITCH, min(MAX_PITCH, pitch))
         return yaw, pitch
 
 

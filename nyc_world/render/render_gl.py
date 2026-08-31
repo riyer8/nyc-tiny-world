@@ -76,15 +76,22 @@ def _draw_quad(q: Quad) -> None:
 
 
 def draw_streets(scene: StreetScene, brightness: float = 1.0) -> None:
+    def lit(q: Quad) -> Quad:
+        return Quad(
+            q.x0, q.z0, q.x1, q.z1, q.x2, q.z2, q.x3, q.z3, q.y,
+            q.r * brightness, q.g * brightness, q.b * brightness,
+        )
+
     for q in scene.sidewalk_quads:
-        _draw_quad(Quad(q.x0, q.z0, q.x1, q.z1, q.x2, q.z2, q.x3, q.z3, q.y,
-                        q.r * brightness, q.g * brightness, q.b * brightness))
+        _draw_quad(lit(q))
+    for q in scene.curb_quads:
+        _draw_quad(lit(q))
     for q in scene.road_quads:
-        _draw_quad(q)
-    for q in scene.crosswalk_quads:
-        _draw_quad(q)
+        _draw_quad(lit(q))
     for q in scene.marking_quads:
-        _draw_quad(q)
+        _draw_quad(lit(q))
+    for q in scene.crosswalk_quads:
+        _draw_quad(lit(q))
     for light in scene.traffic_lights:
         draw_traffic_light(light, brightness)
 
@@ -132,7 +139,32 @@ def draw_box(box: Box3D) -> None:
     glEnd()
 
 
-def draw_building(building: Building3D, brightness: float = 1.0) -> None:
+from nyc_world.render.meshes import _building_dist_sq
+
+
+def draw_building(
+    building: Building3D,
+    brightness: float = 1.0,
+    *,
+    player_x: float | None = None,
+    player_z: float | None = None,
+) -> None:
+    from nyc_world.render.meshes import DETAIL_FULL_M, DETAIL_MEDIUM_M, draw_building_detailed
+
+    if player_x is not None and player_z is not None:
+        dist_sq = _building_dist_sq(building, player_x, player_z)
+        if dist_sq > DETAIL_MEDIUM_M * DETAIL_MEDIUM_M:
+            detail = "simple"
+        elif dist_sq > DETAIL_FULL_M * DETAIL_FULL_M:
+            detail = "medium"
+        else:
+            detail = "full"
+    else:
+        detail = "full"
+    draw_building_detailed(building, brightness, detail=detail)
+
+
+def _draw_building_simple(building: Building3D, brightness: float = 1.0) -> None:
     from OpenGL.GL import GL_QUADS, GL_TRIANGLE_FAN, glBegin, glColor3f, glEnd, glVertex3f
 
     fp = building.footprint
@@ -175,13 +207,29 @@ def draw_landmark(lm: Landmark3D, brightness: float = 1.0) -> None:
 
 
 def draw_npc(npc: NPC, brightness: float = 1.0) -> None:
-    r, g, b = npc.color
-    draw_box(Box3D(npc.x, 0.85, npc.z, 0.5, 1.7, 0.5, r * brightness, g * brightness, b * brightness))
-    if npc.has_umbrella:
-        draw_box(Box3D(npc.x, 2.0, npc.z, 1.2, 0.08, 1.2, 0.9 * brightness, 0.2 * brightness, 0.2 * brightness))
+    from nyc_world.render.meshes import draw_pedestrian
+
+    draw_pedestrian(npc, brightness)
+
+
+def draw_npc_colored(npc: NPC, brightness: float, color: tuple[float, float, float]) -> None:
+    old = npc.color
+    npc.color = color
+    draw_npc(npc, brightness)
+    npc.color = old
+
+
+def _draw_selection_marker(x: float, y: float, z: float) -> None:
+    draw_box(Box3D(x, y, z, 0.5, 0.5, 0.5, 1.0, 0.85, 0.15))
 
 
 def draw_vehicle(vehicle: Vehicle, brightness: float = 1.0) -> None:
+    from nyc_world.render.meshes import draw_vehicle_detailed
+
+    draw_vehicle_detailed(vehicle, brightness)
+
+
+def _draw_vehicle_simple(vehicle: Vehicle, brightness: float = 1.0) -> None:
     r, g, b = vehicle.color
     if vehicle.kind == BIKE:
         draw_box(Box3D(vehicle.x, 0.5, vehicle.z, 0.4, 1.0, 1.2, r * brightness, g * brightness, b * brightness))
@@ -200,18 +248,27 @@ def render_interior_frame(
     pz: float,
     yaw: float,
     pitch: float,
+    *,
+    avatar=None,
+    moving: bool = False,
+    sprinting: bool = False,
+    brightness: float = 1.0,
 ) -> None:
     """Render a simple interior room instead of the city."""
-    from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear, glClearColor, glLoadIdentity, glRotatef, glTranslatef
+    from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear, glClearColor, glLoadIdentity
+
+    from nyc_world.render.camera import apply_third_person_camera
 
     glClearColor(0.35, 0.32, 0.30, 1.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
-    glRotatef(math.degrees(pitch), 1, 0, 0)
-    glRotatef(math.degrees(yaw), 0, 1, 0)
-    glTranslatef(-px, -py, -pz)
+    apply_third_person_camera(px, py, pz, yaw, pitch)
     for box in interior_boxes:
         draw_box(box)
+    if avatar is not None:
+        from nyc_world.render.meshes import draw_player_avatar
+
+        draw_player_avatar(px, py, pz, yaw, avatar, brightness=brightness)
 
 
 def render_frame(
@@ -227,26 +284,106 @@ def render_frame(
     pz: float,
     yaw: float,
     pitch: float,
+    *,
+    avatar=None,
+    twin=None,
+    photo=None,
+    minds=None,
+    selected_id: str | None = None,
 ) -> None:
-    from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear, glLoadIdentity, glRotatef, glTranslatef
+    from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear, glLoadIdentity
 
-    apply_environment(clock)
-    bright = clock.ambient_brightness()
+    from nyc_world.render.camera import apply_third_person_camera, apply_twin_camera
+
+    render_clock = photo.visual_clock(clock) if photo and photo.active else clock
+    apply_environment(render_clock)
+    bright = render_clock.ambient_brightness()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
-    glRotatef(math.degrees(pitch), 1, 0, 0)
-    glRotatef(math.degrees(yaw), 0, 1, 0)
-    glTranslatef(-px, -py, -pz)
+    if photo and photo.active:
+        photo.camera.apply()
+    elif twin and twin.active:
+        apply_twin_camera(
+            px, py, pz, yaw, height=twin.camera_height, distance=twin.camera_distance
+        )
+    else:
+        apply_third_person_camera(px, py, pz, yaw, pitch)
 
     if streets:
         draw_streets(streets, bright)
     for building in buildings:
-        draw_building(building, bright)
+        draw_building(building, bright, player_x=px, player_z=pz)
     for prop in props:
         draw_box(prop)
     for lm in landmarks:
         draw_landmark(lm, bright)
     for npc in npcs:
-        draw_npc(npc, bright)
-    for vehicle in vehicles:
+        if twin and twin.active and twin.heatmap and minds:
+            nearby = sum(
+                1
+                for other in npcs
+                if other.name != npc.name
+                and (other.x - npc.x) ** 2 + (other.z - npc.z) ** 2 < 400
+            )
+            color = twin.heatmap_color(npc, minds=minds, nearby_count=nearby)
+            draw_npc_colored(npc, bright, color)
+        else:
+            draw_npc(npc, bright)
+        if selected_id and npc.name == selected_id:
+            _draw_selection_marker(npc.x, 2.5, npc.z)
+    for i, vehicle in enumerate(vehicles):
         draw_vehicle(vehicle, bright)
+        if selected_id and selected_id == f"vehicle_{i}":
+            _draw_selection_marker(vehicle.x, 2.5, vehicle.z)
+    if avatar is not None and not (twin and twin.active) and not (photo and photo.active):
+        from nyc_world.render.meshes import draw_player_avatar
+
+        draw_player_avatar(px, py, pz, yaw, avatar, brightness=bright)
+
+    if photo and photo.active and photo.vignette > 0:
+        _draw_vignette(photo.vignette)
+
+
+def _draw_vignette(strength: float) -> None:
+    """Radial edge darkening for photo mode (cheap fake DoF)."""
+    from OpenGL.GL import (
+        GL_BLEND,
+        GL_ONE_MINUS_SRC_ALPHA,
+        GL_SRC_ALPHA,
+        GL_DISABLE,
+        glBegin,
+        glBlendFunc,
+        glColor4f,
+        glEnable,
+        glEnd,
+        glMatrixMode,
+        glLoadIdentity,
+        glPopMatrix,
+        glPushMatrix,
+        GL_PROJECTION,
+        GL_MODELVIEW,
+        GL_QUADS,
+    )
+
+    glMatrixMode(GL_PROJECTION)
+    glPushMatrix()
+    glLoadIdentity()
+    glMatrixMode(GL_MODELVIEW)
+    glPushMatrix()
+    glLoadIdentity()
+    glEnable(GL_BLEND)
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    alpha = 0.15 + strength * 0.55
+    glColor4f(0.0, 0.0, 0.0, alpha)
+    glBegin(GL_QUADS)
+    for x0, y0, x1, y1 in ((-1, -1, 1, -0.55), (-1, 0.55, 1, 1), (-1, -0.55, -0.65, 0.55), (0.65, -0.55, 1, 0.55)):
+        glVertex2f(x0, y0)
+        glVertex2f(x1, y0)
+        glVertex2f(x1, y1)
+        glVertex2f(x0, y1)
+    glEnd()
+    glDisable(GL_BLEND)
+    glPopMatrix()
+    glMatrixMode(GL_PROJECTION)
+    glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)

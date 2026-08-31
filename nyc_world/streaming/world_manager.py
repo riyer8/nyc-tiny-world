@@ -33,8 +33,8 @@ class StreamingWorldManager:
         *,
         radii: StreamRadii | None = None,
         loader: TileDataLoader | None = None,
-        npc_count: int = 24,
-        vehicle_count: int = 18,
+        npc_count: int = 48,
+        vehicle_count: int = 32,
     ) -> None:
         self.projection = projection
         self.meters_per_tile = meters_per_tile
@@ -86,7 +86,12 @@ class StreamingWorldManager:
     def update(self, dt: float, player_x: float, player_z: float, *, speed_multiplier: float = 1.0, tick_city: bool = True) -> None:
         self.update_player(player_x, player_z)
         if tick_city:
-            self.city.update(dt, speed_multiplier=speed_multiplier)
+            self.city.update(
+                dt,
+                speed_multiplier=speed_multiplier,
+                player_x=player_x,
+                player_z=player_z,
+            )
 
     @property
     def street_scene(self):

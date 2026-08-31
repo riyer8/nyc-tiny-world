@@ -34,6 +34,7 @@ class NPC:
     path_index: int = 0
     wait_until: float = 0.0
     has_umbrella: bool = False
+    agent_action: str = ""
     color: tuple[float, float, float] = (0.8, 0.3, 0.3)
 
     def current_stop(self) -> ScheduleStop:
@@ -45,6 +46,8 @@ class NPC:
         clock: WorldClock,
         streets: StreetNetwork,
         game_minutes: float,
+        *,
+        agent_mode: bool = False,
     ) -> None:
         if clock.is_raining:
             self.has_umbrella = True
@@ -55,6 +58,8 @@ class NPC:
             return
 
         if not self.path or self.path_index >= len(self.path):
+            if agent_mode:
+                return
             self._advance_schedule(clock, streets, game_minutes)
             return
 
@@ -98,7 +103,12 @@ class NPC:
             self.path = [(tx, tz)]
             self.path_index = 0
             return
-        node_path = astar(streets.walk_graph, start, goal)
+        node_path = astar(
+            streets.walk_graph,
+            start,
+            goal,
+            blocked_edges=getattr(streets, "blocked_edges", None),
+        )
         if not node_path:
             self.path = [(tx, tz)]
         else:
@@ -156,12 +166,35 @@ def _schedule_tourist(landmarks: list[Landmark3D], home: tuple[float, float]) ->
     return stops
 
 
+def _schedule_pedestrian(
+    streets: StreetNetwork,
+    start_x: float,
+    start_z: float,
+    rng: random.Random,
+) -> list[ScheduleStop]:
+    """Short wander loop for sidewalk foot traffic."""
+    stops: list[ScheduleStop] = []
+    x, z = start_x, start_z
+    hour = 8
+    for i in range(6):
+        node = _nearest_node(streets, x, z)
+        if node is not None and streets.walk_graph.get(node):
+            nxt_id, _ = rng.choice(streets.walk_graph[node])
+            x, z = streets.positions[nxt_id]
+        else:
+            x += rng.uniform(-25, 25)
+            z += rng.uniform(-25, 25)
+        stops.append(ScheduleStop(hour, (i * 7) % 60, x, z, "walking"))
+        hour = 8 + (i + 1) % 12
+    return stops
+
+
 def spawn_npcs(
     streets: StreetNetwork,
     landmarks: list[Landmark3D],
     spawn_x: float,
     spawn_z: float,
-    count: int = 24,
+    count: int = 48,
     seed: int = 7,
 ) -> list[NPC]:
     rng = random.Random(seed)
@@ -187,8 +220,7 @@ def spawn_npcs(
     lunch = pick_lm(cafes, pick_lm(stores, home))
 
     npcs: list[NPC] = []
-    personalities = ["commuter", "commuter", "tourist", "local"]
-    colors = [(0.8, 0.3, 0.3), (0.3, 0.5, 0.8), (0.9, 0.7, 0.2), (0.4, 0.7, 0.4)]
+    personalities = ["commuter", "commuter", "tourist", "local", "pedestrian", "pedestrian"]
 
     for i in range(count):
         nid, (nx, nz) = rng.choice(nodes)
@@ -197,6 +229,8 @@ def spawn_npcs(
             schedule = _schedule_commuter(home, work, subway, lunch)
         elif personality == "tourist":
             schedule = _schedule_tourist(sights, (nx, nz))
+        elif personality == "pedestrian":
+            schedule = _schedule_pedestrian(streets, nx, nz, rng)
         else:
             schedule = [
                 ScheduleStop(9, 0, nx, nz, "home"),
@@ -206,15 +240,19 @@ def spawn_npcs(
                 ScheduleStop(19, 0, nx, nz, "home"),
             ]
 
+        jacket_colors = [
+            (0.8, 0.3, 0.3), (0.3, 0.5, 0.8), (0.9, 0.7, 0.2), (0.4, 0.7, 0.4),
+            (0.55, 0.35, 0.55), (0.25, 0.45, 0.55), (0.85, 0.45, 0.35), (0.35, 0.35, 0.38),
+        ]
         npcs.append(
             NPC(
                 name=f"npc_{i}",
                 personality=personality,
                 x=nx,
                 z=nz,
-                speed=rng.uniform(1.2, 1.8),
+                speed=rng.uniform(1.0, 1.6) if personality == "pedestrian" else rng.uniform(1.2, 1.8),
                 schedule=schedule,
-                color=colors[i % len(colors)],
+                color=jacket_colors[i % len(jacket_colors)],
             )
         )
     return npcs

@@ -8,7 +8,8 @@ from nyc_world.game.interactables import Interactable, InteractableKind
 from nyc_world.game.interiors import INTERIORS, Interior
 from nyc_world.city.landmarks import CAFE, LANDMARK, STORE, SUBWAY, Landmark3D
 from nyc_world.city.npcs import NPC
-from nyc_world.game.quests import DIALOGUE, QuestManager
+from nyc_world.game.dialogue_lines import DIALOGUE
+from nyc_world.game.quests import QuestManager
 
 
 @dataclass
@@ -17,6 +18,7 @@ class InteractionResult:
     lines: list[str] = field(default_factory=list)
     entered_interior: str | None = None
     exited_interior: bool = False
+    open_subway: bool = False
 
 
 class InteractionSystem:
@@ -30,6 +32,7 @@ class InteractionSystem:
         self.nearest: Interactable | None = None
         self.mode: str = "exterior"
         self.current_interior_id: str | None = None
+        self.current_subway_station: str | None = None
         self._interior_interactables: list[Interactable] = []
 
     @property
@@ -76,8 +79,10 @@ class InteractionSystem:
             return InteractionResult(True, lines, entered_interior=target.interior_id)
 
         if target.kind == InteractableKind.SUBWAY:
-            lines.extend(DIALOGUE.get("subway_ride", ["You enter the subway."]))
-            return InteractionResult(True, lines)
+            if not self.quests.player.has_item("metro_card"):
+                lines.extend(DIALOGUE.get("subway_no_card", ["You need a MetroCard."]))
+                return InteractionResult(True, lines)
+            return InteractionResult(True, [], open_subway=True)
 
         if target.kind == InteractableKind.OBJECT and target.item_id:
             lines.extend(self.quests.on_collect(target.item_id))
@@ -116,6 +121,19 @@ class InteractionSystem:
         self.mode = "exterior"
         self.current_interior_id = None
         self._interior_interactables = []
+
+    def enter_subway(self, station_id: str) -> None:
+        self.mode = "subway"
+        self.current_subway_station = station_id
+
+    def exit_subway(self) -> None:
+        if self.mode == "subway":
+            self.mode = "exterior"
+        self.current_subway_station = None
+
+    @property
+    def in_subway(self) -> bool:
+        return self.mode == "subway"
 
     def prompt(self) -> str | None:
         if self.nearest:

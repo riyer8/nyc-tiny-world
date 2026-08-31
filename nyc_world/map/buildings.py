@@ -10,6 +10,7 @@ from pathlib import Path
 from shapely.geometry import LineString, Polygon
 
 from nyc_world.core.projection import GeoProjection
+from nyc_world.map.building_styles import BuildingStyle, style_from_tags
 from nyc_world.map.map_generator import OsmIndex
 from nyc_world.paths import DATA_DIR
 
@@ -54,6 +55,51 @@ class Building3D:
     roof_g: float
     roof_b: float
     name: str = ""
+    building_type: str = "yes"
+    material: str = ""
+    levels: int = 0
+    roof_style: str = "flat"
+    trim_r: float = 0.75
+    trim_g: float = 0.76
+    trim_b: float = 0.78
+    window_r: float = 0.22
+    window_g: float = 0.28
+    window_b: float = 0.36
+    has_storefront: bool = False
+    has_cornice: bool = False
+
+    @classmethod
+    def from_style(
+        cls,
+        footprint: tuple[tuple[float, float], ...],
+        height: float,
+        style: BuildingStyle,
+        *,
+        name: str = "",
+    ) -> Building3D:
+        return cls(
+            footprint=footprint,
+            height=height,
+            wall_r=style.wall[0],
+            wall_g=style.wall[1],
+            wall_b=style.wall[2],
+            roof_r=style.roof[0],
+            roof_g=style.roof[1],
+            roof_b=style.roof[2],
+            name=name,
+            building_type=style.building_type,
+            material=style.material,
+            levels=style.levels,
+            roof_style=style.roof_style,
+            trim_r=style.trim[0],
+            trim_g=style.trim[1],
+            trim_b=style.trim[2],
+            window_r=style.window[0],
+            window_g=style.window[1],
+            window_b=style.window[2],
+            has_storefront=style.has_storefront,
+            has_cornice=style.has_cornice,
+        )
 
 
 from nyc_world.geo.coords import lonlat_to_world_xz
@@ -162,20 +208,9 @@ def _polygon_to_building(
 
     footprint = tuple(lonlat_to_world_xz(projection, lon, lat) for lon, lat in ring)
     height = estimate_height_m(tags)
-    wall, roof = height_colors(height)
+    style = style_from_tags(tags, height_m=height)
     name = tags.get("name", "")
-
-    return Building3D(
-        footprint=footprint,
-        height=height,
-        wall_r=wall[0],
-        wall_g=wall[1],
-        wall_b=wall[2],
-        roof_r=roof[0],
-        roof_g=roof[1],
-        roof_b=roof[2],
-        name=name,
-    )
+    return Building3D.from_style(footprint, height, style, name=name)
 
 
 def load_buildings(projection: GeoProjection, osm_data: dict) -> list[Building3D]:

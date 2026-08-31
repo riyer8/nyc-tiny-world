@@ -44,8 +44,16 @@ DRIVEABLE = frozenset(
 
 WALKABLE = DRIVEABLE | frozenset({"pedestrian", "footway", "path", "steps"})
 
-SIDEWALK_WIDTH = 1.8
+SIDEWALK_WIDTH = 1.6
+CURB_WIDTH = 0.14
 MARKING_SPACING = 4.0
+
+# Surface colors (linear RGB).
+ASPHALT = (0.14, 0.14, 0.16)
+CONCRETE = (0.80, 0.78, 0.74)
+CURB_STONE = (0.58, 0.56, 0.54)
+CROSSWALK = (0.94, 0.94, 0.90)
+LANE_MARK = (0.92, 0.88, 0.55)
 
 
 @dataclass
@@ -77,6 +85,7 @@ class TrafficLight3D:
 class StreetScene:
     road_quads: list[Quad] = field(default_factory=list)
     sidewalk_quads: list[Quad] = field(default_factory=list)
+    curb_quads: list[Quad] = field(default_factory=list)
     crosswalk_quads: list[Quad] = field(default_factory=list)
     marking_quads: list[Quad] = field(default_factory=list)
     traffic_lights: list[TrafficLight3D] = field(default_factory=list)
@@ -100,6 +109,7 @@ class StreetNetwork:
     scene: StreetScene
     intersection_nodes: set[int]
     named_segments: list[NamedStreetSegment] = field(default_factory=list)
+    blocked_edges: set[tuple[int, int]] = field(default_factory=set)
 
 
 def _street_name(tags: dict) -> str | None:
@@ -139,6 +149,28 @@ def _strip_quad(
     )
 
 
+def _offset_strip_quad(
+    ax: float,
+    az: float,
+    bx: float,
+    bz: float,
+    half_w: float,
+    perp_offset: float,
+    y: float,
+    color: tuple[float, float, float],
+) -> Quad:
+    """Strip parallel to segment A→B, shifted perpendicular by perp_offset (+ = left)."""
+    dx, dz = bx - ax, bz - az
+    length = math.hypot(dx, dz)
+    px, pz = _perp(dx, dz, length)
+    shift_x, shift_z = px * perp_offset, pz * perp_offset
+    return _strip_quad(
+        ax + shift_x, az + shift_z,
+        bx + shift_x, bz + shift_z,
+        half_w, y, color,
+    )
+
+
 def _crosswalk_at(x: float, z: float, axis_x: float, axis_z: float) -> Quad:
     px, pz = _perp(axis_x, axis_z, 1.0)
     w, d = 3.0, 0.4
@@ -147,7 +179,7 @@ def _crosswalk_at(x: float, z: float, axis_x: float, axis_z: float) -> Quad:
         x + px * w + axis_x * d, z + pz * w + axis_z * d,
         x - px * w + axis_x * d, z - pz * w + axis_z * d,
         x - px * w - axis_x * d, z - pz * w - axis_z * d,
-        0.05, 0.92, 0.92, 0.88,
+        0.068, *CROSSWALK,
     )
 
 
@@ -171,8 +203,8 @@ def build_street_network(projection: GeoProjection, osm_data: dict) -> StreetNet
             continue
 
         road_w = ROAD_WIDTH_M.get(highway, 5.0)
-        road_color = (0.22, 0.22, 0.24)
-        walk_color = (0.72, 0.70, 0.66)
+        is_drive = highway in DRIVEABLE
+        is_walk = highway in WALKABLE
 
         for i, nid in enumerate(node_ids):
             lon, lat = index.nodes[nid]
@@ -187,18 +219,36 @@ def build_street_network(projection: GeoProjection, osm_data: dict) -> StreetNet
             if length < 0.5:
                 continue
 
-            scene.road_quads.append(
-                _strip_quad(x0, z0, x1, z1, road_w / 2, 0.04, road_color)
-            )
-            if highway in WALKABLE:
-                scene.sidewalk_quads.append(
-                    _strip_quad(x0, z0, x1, z1, road_w / 2 + SIDEWALK_WIDTH, 0.06, walk_color)
+            if is_drive:
+                scene.road_quads.append(
+                    _strip_quad(x0, z0, x1, z1, road_w / 2, 0.025, ASPHALT)
                 )
+                curb_offset = road_w / 2 + CURB_WIDTH / 2
+                scene.curb_quads.append(
+                    _offset_strip_quad(x0, z0, x1, z1, CURB_WIDTH / 2, curb_offset, 0.055, CURB_STONE)
+                )
+                scene.curb_quads.append(
+                    _offset_strip_quad(x0, z0, x1, z1, CURB_WIDTH / 2, -curb_offset, 0.055, CURB_STONE)
+                )
+                sw_offset = road_w / 2 + CURB_WIDTH + SIDEWALK_WIDTH / 2
+                scene.sidewalk_quads.append(
+                    _offset_strip_quad(x0, z0, x1, z1, SIDEWALK_WIDTH / 2, sw_offset, 0.07, CONCRETE)
+                )
+                scene.sidewalk_quads.append(
+                    _offset_strip_quad(x0, z0, x1, z1, SIDEWALK_WIDTH / 2, -sw_offset, 0.07, CONCRETE)
+                )
+            elif is_walk:
+                # Footways / pedestrian plazas — concrete path, no asphalt lane.
+                scene.sidewalk_quads.append(
+                    _strip_quad(x0, z0, x1, z1, max(road_w / 2, 1.0), 0.065, CONCRETE)
+                )
+
+            if is_walk:
                 walk_edges.append((n0, n1, length))
-            if highway in DRIVEABLE:
+            if is_drive:
                 drive_edges.append((n0, n1, length))
 
-            if highway in DRIVEABLE and road_w >= 6:
+            if is_drive and road_w >= 6:
                 dx, dz = (x1 - x0) / length, (z1 - z0) / length
                 dist = MARKING_SPACING
                 while dist < length - MARKING_SPACING:
@@ -207,7 +257,7 @@ def build_street_network(projection: GeoProjection, osm_data: dict) -> StreetNet
                         _strip_quad(
                             mx - dx * 1.2, mz - dz * 1.2,
                             mx + dx * 1.2, mz + dz * 1.2,
-                            0.15, 0.05, (0.9, 0.85, 0.5),
+                            0.12, 0.028, LANE_MARK,
                         )
                     )
                     dist += MARKING_SPACING * 2
