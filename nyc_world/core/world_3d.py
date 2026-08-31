@@ -52,6 +52,12 @@ class World3D:
         self.buildings: list[Building3D] = []
         if world.projection:
             self.buildings = load_buildings_for_area(world.projection)
+        from nyc_world.core.collision import BuildingCollision
+
+        self.building_collision = BuildingCollision(self.buildings)
+        from nyc_world.core.collision import BuildingFootprintIndex
+
+        self.camera_footprint = BuildingFootprintIndex(self.buildings)
         self.boxes: list[Box3D] = self.build_scene()
 
     def game_to_world(self, game_x: float, game_y: float) -> tuple[float, float, float]:
@@ -82,6 +88,8 @@ class World3D:
         for gx, gy in checks:
             if self.world.collides(gx, gy, ts * 0.25):
                 return True
+        if self.building_collision.is_blocked(x, z, radius):
+            return True
         return False
 
     def resolve_move(
@@ -98,6 +106,9 @@ class World3D:
                 x, z = new_x, old_z
                 if self.is_blocked(x, z):
                     x, z = old_x, old_z
+        x, z = self.building_collision.push_out(x, z, PLAYER_RADIUS, ox=old_x, oz=old_z)
+        if self.is_blocked(x, z):
+            x, z = old_x, old_z
         return x, z
 
     def _add_box(

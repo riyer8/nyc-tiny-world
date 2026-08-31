@@ -25,7 +25,7 @@ from nyc_world.streaming.world_manager import StreamingWorldManager
 
 def test_stream_radii_defaults():
     assert DEFAULT_RADII.data_m == pytest.approx(5 * 1609.344, rel=0.01)
-    assert DEFAULT_RADII.render_3d_m == pytest.approx(1609.344, rel=0.01)
+    assert DEFAULT_RADII.render_3d_m == pytest.approx(450.0, rel=0.01)
     assert DEFAULT_RADII.simulation_m == 300.0
     assert DEFAULT_RADII.interaction_m == 100.0
 
@@ -62,9 +62,9 @@ def test_lod_buildings_filters_by_distance():
     radii = StreamRadii(render_3d_m=50.0, data_m=200.0)
     near = Building3D(((0, 0), (10, 0), (10, 10), (0, 10)), 10, 0.5, 0.5, 0.5, 0.4, 0.4, 0.4)
     far = Building3D(((200, 200), (210, 200), (210, 210), (200, 210)), 10, 0.5, 0.5, 0.5, 0.4, 0.4, 0.4)
-    detailed, markers = lod_buildings([near, far], 5, 5, radii)
+    detailed, far = lod_buildings([near, far], 5, 5, radii)
     assert len(detailed) == 1
-    assert len(markers) == 1
+    assert len(far) == 1
 
 
 def test_streaming_world_manager_updates_tiles():

@@ -45,6 +45,33 @@ def setup_gl(width: int, height: int, fov: float = 70.0) -> None:
     glClearDepth(1.0)
     glShadeModel(GL_SMOOTH)
     glHint(0x0C51, 0x1102)
+    # Manual per-vertex colors — fixed-function lighting is slower and redundant here.
+
+
+def _enable_scene_lighting() -> None:
+    """Soft directional light so buildings and characters have readable depth."""
+    from OpenGL.GL import (
+        GL_AMBIENT,
+        GL_AMBIENT_AND_DIFFUSE,
+        GL_COLOR_MATERIAL,
+        GL_DIFFUSE,
+        GL_FRONT_AND_BACK,
+        GL_LIGHT0,
+        GL_LIGHTING,
+        GL_POSITION,
+        GLfloat,
+        glColorMaterial,
+        glEnable,
+        glLightfv,
+    )
+
+    glEnable(GL_LIGHTING)
+    glEnable(GL_LIGHT0)
+    glEnable(GL_COLOR_MATERIAL)
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
+    glLightfv(GL_LIGHT0, GL_AMBIENT, (GLfloat * 4)(0.35, 0.35, 0.38, 1.0))
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, (GLfloat * 4)(0.72, 0.70, 0.66, 1.0))
+    glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat * 4)(0.45, 0.85, 0.35, 0.0))
 
 
 def apply_environment(clock: WorldClock) -> None:
@@ -75,25 +102,52 @@ def _draw_quad(q: Quad) -> None:
     glEnd()
 
 
-def draw_streets(scene: StreetScene, brightness: float = 1.0) -> None:
-    def lit(q: Quad) -> Quad:
-        return Quad(
-            q.x0, q.z0, q.x1, q.z1, q.x2, q.z2, q.x3, q.z3, q.y,
-            q.r * brightness, q.g * brightness, q.b * brightness,
-        )
+def _draw_quad_batch(quads: list[Quad], brightness: float = 1.0) -> None:
+    """Draw many quads in one glBegin block (same layer, fewer driver calls)."""
+    if not quads:
+        return
+    from OpenGL.GL import GL_QUADS, glBegin, glColor3f, glEnd, glVertex3f
 
-    for q in scene.sidewalk_quads:
-        _draw_quad(lit(q))
-    for q in scene.curb_quads:
-        _draw_quad(lit(q))
-    for q in scene.road_quads:
-        _draw_quad(lit(q))
-    for q in scene.marking_quads:
-        _draw_quad(lit(q))
-    for q in scene.crosswalk_quads:
-        _draw_quad(lit(q))
-    for light in scene.traffic_lights:
-        draw_traffic_light(light, brightness)
+    glBegin(GL_QUADS)
+    for q in quads:
+        glColor3f(q.r * brightness, q.g * brightness, q.b * brightness)
+        glVertex3f(q.x0, q.y, q.z0)
+        glVertex3f(q.x1, q.y, q.z1)
+        glVertex3f(q.x2, q.y, q.z2)
+        glVertex3f(q.x3, q.y, q.z3)
+    glEnd()
+
+
+_street_list_id: int | None = None
+_street_scene_id: int | None = None
+
+
+def _draw_streets_cached(scene: StreetScene, brightness: float = 1.0) -> None:
+    global _street_list_id, _street_scene_id
+    from OpenGL.GL import GL_COMPILE, glCallList, glEndList, glGenLists, glNewList
+
+    scene_key = id(scene)
+    if _street_list_id is None or _street_scene_id != scene_key or abs(brightness - 1.0) >= 0.02:
+        if _street_list_id is not None:
+            from OpenGL.GL import glDeleteLists
+
+            glDeleteLists(_street_list_id, 1)
+        _street_list_id = glGenLists(1)
+        glNewList(_street_list_id, GL_COMPILE)
+        _draw_quad_batch(scene.sidewalk_quads, brightness)
+        _draw_quad_batch(scene.curb_quads, brightness)
+        _draw_quad_batch(scene.road_quads, brightness)
+        _draw_quad_batch(scene.marking_quads, brightness)
+        _draw_quad_batch(scene.crosswalk_quads, brightness)
+        for light in scene.traffic_lights:
+            draw_traffic_light(light, brightness)
+        glEndList()
+        _street_scene_id = scene_key
+    glCallList(_street_list_id)
+
+
+def draw_streets(scene: StreetScene, brightness: float = 1.0) -> None:
+    _draw_streets_cached(scene, brightness)
 
 
 def draw_traffic_light(light: TrafficLight3D, brightness: float = 1.0) -> None:
@@ -139,7 +193,7 @@ def draw_box(box: Box3D) -> None:
     glEnd()
 
 
-from nyc_world.render.meshes import _building_dist_sq
+from nyc_world.render.meshes import classify_building_details
 
 
 def draw_building(
@@ -148,45 +202,35 @@ def draw_building(
     *,
     player_x: float | None = None,
     player_z: float | None = None,
+    force_detail: str | None = None,
+    detail: str | None = None,
 ) -> None:
-    from nyc_world.render.meshes import DETAIL_FULL_M, DETAIL_MEDIUM_M, draw_building_detailed
+    from nyc_world.render.meshes import draw_building_detailed
 
-    if player_x is not None and player_z is not None:
-        dist_sq = _building_dist_sq(building, player_x, player_z)
-        if dist_sq > DETAIL_MEDIUM_M * DETAIL_MEDIUM_M:
-            detail = "simple"
-        elif dist_sq > DETAIL_FULL_M * DETAIL_FULL_M:
-            detail = "medium"
-        else:
-            detail = "full"
-    else:
-        detail = "full"
-    draw_building_detailed(building, brightness, detail=detail)
+    draw_building_detailed(
+        building,
+        brightness,
+        detail=detail or force_detail or "simple",
+        player_x=player_x,
+        player_z=player_z,
+    )
 
 
-def _draw_building_simple(building: Building3D, brightness: float = 1.0) -> None:
-    from OpenGL.GL import GL_QUADS, GL_TRIANGLE_FAN, glBegin, glColor3f, glEnd, glVertex3f
+def draw_far_buildings(
+    buildings: list[Building3D],
+    brightness: float = 1.0,
+    *,
+    player_x: float = 0.0,
+    player_z: float = 0.0,
+) -> None:
+    from nyc_world.render.meshes import MAX_SKYLINE_BUILDINGS, _building_dist_sq, draw_building_detailed
 
-    fp = building.footprint
-    if len(fp) < 3:
-        return
-    h = building.height
-    glColor3f(building.wall_r * brightness, building.wall_g * brightness, building.wall_b * brightness)
-    glBegin(GL_QUADS)
-    for i in range(len(fp)):
-        x0, z0 = fp[i]
-        x1, z1 = fp[(i + 1) % len(fp)]
-        glVertex3f(x0, 0, z0)
-        glVertex3f(x1, 0, z1)
-        glVertex3f(x1, h, z1)
-        glVertex3f(x0, h, z0)
-    glEnd()
-    glColor3f(building.roof_r * brightness, building.roof_g * brightness, building.roof_b * brightness)
-    glBegin(GL_TRIANGLE_FAN)
-    glVertex3f(fp[0][0], h, fp[0][1])
-    for x, z in fp[1:]:
-        glVertex3f(x, h, z)
-    glEnd()
+    if len(buildings) > MAX_SKYLINE_BUILDINGS:
+        buildings = sorted(buildings, key=lambda b: _building_dist_sq(b, player_x, player_z))[
+            :MAX_SKYLINE_BUILDINGS
+        ]
+    for building in buildings:
+        draw_building_detailed(building, brightness, detail="skyline")
 
 
 def draw_landmark(lm: Landmark3D, brightness: float = 1.0) -> None:
@@ -268,7 +312,7 @@ def render_interior_frame(
     if avatar is not None:
         from nyc_world.render.meshes import draw_player_avatar
 
-        draw_player_avatar(px, py, pz, yaw, avatar, brightness=brightness)
+        draw_player_avatar(px, py, pz, avatar.facing_yaw, avatar, brightness=brightness)
 
 
 def render_frame(
@@ -285,6 +329,8 @@ def render_frame(
     yaw: float,
     pitch: float,
     *,
+    far_buildings: list[Building3D] | None = None,
+    camera_footprint=None,
     avatar=None,
     twin=None,
     photo=None,
@@ -307,12 +353,27 @@ def render_frame(
             px, py, pz, yaw, height=twin.camera_height, distance=twin.camera_distance
         )
     else:
-        apply_third_person_camera(px, py, pz, yaw, pitch)
+        apply_third_person_camera(
+            px, py, pz, yaw, pitch, camera_footprint=camera_footprint
+        )
 
+    building_details = classify_building_details(buildings, px, pz)
     if streets:
         draw_streets(streets, bright)
+    from OpenGL.GL import GL_CULL_FACE, glDisable, glEnable
+
+    glDisable(GL_CULL_FACE)
     for building in buildings:
-        draw_building(building, bright, player_x=px, player_z=pz)
+        draw_building(
+            building,
+            bright,
+            player_x=px,
+            player_z=pz,
+            detail=building_details.get(id(building), "simple"),
+        )
+    if far_buildings:
+        draw_far_buildings(far_buildings, bright, player_x=px, player_z=pz)
+    glEnable(GL_CULL_FACE)
     for prop in props:
         draw_box(prop)
     for lm in landmarks:
@@ -338,7 +399,7 @@ def render_frame(
     if avatar is not None and not (twin and twin.active) and not (photo and photo.active):
         from nyc_world.render.meshes import draw_player_avatar
 
-        draw_player_avatar(px, py, pz, yaw, avatar, brightness=bright)
+        draw_player_avatar(px, py, pz, avatar.facing_yaw, avatar, brightness=bright)
 
     if photo and photo.active and photo.vignette > 0:
         _draw_vignette(photo.vignette)

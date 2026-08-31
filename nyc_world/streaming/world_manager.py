@@ -64,13 +64,13 @@ class StreamingWorldManager:
         self.state.loaded_tile_ids = self.loader.load_around(lat, lon, self.radii.data_m)
         self.loader.unload_outside(lat, lon, self.radii.data_m)
 
-        detailed, markers = lod_buildings(
+        detailed, far = lod_buildings(
             self.all_buildings, player_x, player_z, self.radii
         )
         self.render_buildings = detailed
-        self.state.far_building_markers = markers
-        self.state.buildings_in_render = len(detailed)
-        self.state.buildings_in_data = len(detailed) + len(markers)
+        self.state.far_buildings = far
+        self.state.buildings_in_render = len(detailed) + len(far)
+        self.state.buildings_in_data = len(detailed) + len(far)
 
         self.render_landmarks = lod_landmarks(
             self.city.landmarks, player_x, player_z, self.radii.render_3d_m

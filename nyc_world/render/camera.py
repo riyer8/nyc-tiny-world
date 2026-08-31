@@ -64,11 +64,20 @@ def apply_third_person_camera(
     pz: float,
     yaw: float,
     pitch: float,
+    *,
+    buildings: list | None = None,
+    camera_footprint=None,
 ) -> None:
     """Position the OpenGL camera in third-person view."""
     from OpenGL.GLU import gluLookAt
 
     ex, ey, ez = third_person_camera_eye(px, py, pz, yaw, pitch)
+    if camera_footprint is not None:
+        ex, ez = camera_footprint.clamp_camera(ex, ez, px, pz)
+    elif buildings:
+        from nyc_world.core.collision import BuildingFootprintIndex
+
+        ex, ez = BuildingFootprintIndex(buildings).clamp_camera(ex, ez, px, pz)
     ly = third_person_look_at(py)
     gluLookAt(ex, ey, ez, px, ly, pz, 0.0, 1.0, 0.0)
 

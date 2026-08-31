@@ -44,18 +44,18 @@ def lod_buildings(
     player_x: float,
     player_z: float,
     radii: StreamRadii,
-) -> tuple[list[Building3D], list[tuple[float, float]]]:
-    """Return (detailed 3D buildings, lightweight far markers)."""
+) -> tuple[list[Building3D], list[Building3D]]:
+    """Return (near detailed 3D buildings, far skyline impostors)."""
     detailed: list[Building3D] = []
-    markers: list[tuple[float, float]] = []
+    far: list[Building3D] = []
     for building in buildings:
         cx, cz = building_center(building)
         dist = distance_xz(player_x, player_z, cx, cz)
         if dist <= radii.render_3d_m:
             detailed.append(building)
         elif dist <= radii.data_m:
-            markers.append((cx, cz))
-    return detailed, markers
+            far.append(building)
+    return detailed, far
 
 
 def lod_landmarks(

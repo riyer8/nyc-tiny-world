@@ -16,6 +16,6 @@ class StreamingState:
     data_radius_m: float = DEFAULT_RADII.data_m
     render_radius_m: float = DEFAULT_RADII.render_3d_m
     simulation_radius_m: float = DEFAULT_RADII.simulation_m
-    far_building_markers: list[tuple[float, float]] = field(default_factory=list)
+    far_buildings: list = field(default_factory=list)
     buildings_in_render: int = 0
     buildings_in_data: int = 0

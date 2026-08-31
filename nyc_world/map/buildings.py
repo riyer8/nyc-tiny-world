@@ -67,6 +67,8 @@ class Building3D:
     window_b: float = 0.36
     has_storefront: bool = False
     has_cornice: bool = False
+    facade_key: str = ""
+    wikidata: str = ""
 
     @classmethod
     def from_style(
@@ -76,6 +78,8 @@ class Building3D:
         style: BuildingStyle,
         *,
         name: str = "",
+        facade_key: str = "",
+        wikidata: str = "",
     ) -> Building3D:
         return cls(
             footprint=footprint,
@@ -99,10 +103,26 @@ class Building3D:
             window_b=style.window[2],
             has_storefront=style.has_storefront,
             has_cornice=style.has_cornice,
+            facade_key=facade_key,
+            wikidata=wikidata,
         )
 
 
 from nyc_world.geo.coords import lonlat_to_world_xz
+
+
+def facade_key_from_tags(tags: dict) -> tuple[str, str]:
+    """Return (facade_key, wikidata_id) for texture lookup."""
+    wikidata = tags.get("wikidata", "").strip()
+    if wikidata:
+        key = wikidata if wikidata.startswith("Q") else f"Q{wikidata}"
+        return key, key
+    name = tags.get("name", "").strip()
+    if name:
+        slug = re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_")
+        if slug:
+            return slug, ""
+    return "", ""
 
 
 def parse_meters(value: str) -> float:
@@ -210,7 +230,10 @@ def _polygon_to_building(
     height = estimate_height_m(tags)
     style = style_from_tags(tags, height_m=height)
     name = tags.get("name", "")
-    return Building3D.from_style(footprint, height, style, name=name)
+    facade_key, wikidata = facade_key_from_tags(tags)
+    return Building3D.from_style(
+        footprint, height, style, name=name, facade_key=facade_key, wikidata=wikidata
+    )
 
 
 def load_buildings(projection: GeoProjection, osm_data: dict) -> list[Building3D]:
@@ -251,6 +274,10 @@ def load_buildings(projection: GeoProjection, osm_data: dict) -> list[Building3D
 def load_buildings_for_area(projection: GeoProjection) -> list[Building3D]:
     slug = projection.area_slug or "greenwich_village"
     path = DATA_DIR / f"{slug}_osm.json"
+    # Broader Greenwich Village OSM covers the same spawn with more buildings.
+    village_path = DATA_DIR / "greenwich_village_osm.json"
+    if slug == "washington_square" and village_path.exists():
+        path = village_path
     if not path.exists():
         return []
     osm_data = json.loads(path.read_text())

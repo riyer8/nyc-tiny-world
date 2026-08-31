@@ -1,7 +1,26 @@
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
 .venv/
 venv/
+
+# OS
 .DS_Store
+
+# Player runtime data
+data/saves/
+data/screenshots/
+
+# Recorded trajectories (keep synthetic fixture for tests/training demos)
+data/trajectories/*.jsonl
+!data/trajectories/synthetic.jsonl
+
+# Live feed cache (refetched when --live-feeds is used)
+data/feeds/latest.json
+
+# Facade photos — run: python3 scripts/fetch_facades.py
+# manifest.json stays tracked as the index; images are downloaded locally.
+data/facades/*.jpg
+data/facades/image_titles.json

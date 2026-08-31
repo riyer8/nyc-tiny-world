@@ -12,7 +12,7 @@ class StreamRadii:
     """Concentric radii around the player."""
 
     data_m: float = 5.0 * METERS_PER_MILE  # ~8 km — fetch/cache OSM tiles
-    render_3d_m: float = 1.0 * METERS_PER_MILE  # ~1.6 km — detailed 3D geometry
+    render_3d_m: float = 450.0  # ~0.28 mile — near-field 3D geometry
     simulation_m: float = 300.0  # NPCs, vehicles, clock-driven actors
     interaction_m: float = 100.0  # interactables, interiors, quest objects
 

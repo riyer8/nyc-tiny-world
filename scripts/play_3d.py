@@ -62,13 +62,34 @@ from pathlib import Path
 from nyc_world.core import World, World3D
 from nyc_world.game import CONTROLS_HELP_3D, GameSession, world_speed_multiplier
 from nyc_world.game.controls import JumpState, MouseLook, movement_delta_3d, read_movement
-from nyc_world.game.player_avatar import PlayerAvatar
+from nyc_world.game.player_avatar import PlayerAvatar, camera_facing_yaw
 from nyc_world.geo import build_minimap, locate_player
 from nyc_world.paths import DEFAULT_MAP_PATH
 from nyc_world.render import draw_hud, render_frame, render_interior_frame, setup_gl
 from nyc_world.streaming import StreamingWorldManager
 
 FPS = 60
+
+
+def _warmup_render_cache(world3d: World3D, stream: StreamingWorldManager, px: float, pz: float) -> None:
+    """Pre-compile OpenGL display lists so the first gameplay frames stay smooth."""
+    import math
+
+    from nyc_world.render.meshes import classify_building_details, draw_building_detailed
+
+    if stream.street_scene:
+        from nyc_world.render.render_gl import draw_streets
+
+        draw_streets(stream.street_scene, 1.0)
+
+    details = classify_building_details(stream.render_buildings, px, pz)
+    for building in stream.render_buildings:
+        detail = details.get(id(building), "simple")
+        if detail in ("simple", "skyline"):
+            draw_building_detailed(building, 1.0, detail=detail)
+    for building in stream.state.far_buildings[:250]:
+        draw_building_detailed(building, 1.0, detail="skyline")
+    print(f"Graphics cache ready ({len(stream.render_buildings)} buildings).")
 
 
 def _set_mouse_look(active: bool) -> None:
@@ -127,7 +148,7 @@ def main() -> None:
     pitch = MouseLook().default_pitch
     mouse_look = MouseLook()
     jump = JumpState()
-    avatar = PlayerAvatar()
+    avatar = PlayerAvatar(facing_yaw=camera_facing_yaw(yaw))
     show_geo_debug = False
 
     stream: StreamingWorldManager | None = None
@@ -163,6 +184,8 @@ def main() -> None:
         print("Quest: Walk to Maya (pink NPC near spawn) and press E to start.")
         print(CONTROLS_HELP_3D)
         print("Press G for location & simulation debug panel.")
+        stream.update_player(px, pz)
+        _warmup_render_cache(world3d, stream, px, pz)
 
     clock = pygame.time.Clock()
     running = True
@@ -354,6 +377,7 @@ def main() -> None:
                 )
 
         mx, my = pygame.mouse.get_rel()
+        move_x, move_z = 0.0, 0.0
         if in_photo and session:
             cam = session.photo.camera
             yaw, pitch = mouse_look.apply(mx, my, cam.yaw, cam.pitch)
@@ -376,7 +400,14 @@ def main() -> None:
                 px, pz = session.subway_spawn()
 
         jump_height = jump.update(dt)
-        avatar.update(dt, moving=movement.active and not in_photo, sprinting=movement.sprint)
+        avatar.update(
+            dt,
+            moving=movement.active and not in_photo,
+            sprinting=movement.sprint,
+            move_x=move_x,
+            move_z=move_z,
+            camera_yaw=yaw,
+        )
         ground_y = jump_height
         if in_photo and session:
             cam = session.photo.camera
@@ -409,6 +440,7 @@ def main() -> None:
                 clock=render_clock,
                 streets=stream.street_scene if stream else None,
                 buildings=stream.render_buildings if stream else world3d.buildings,
+                far_buildings=stream.state.far_buildings if stream else None,
                 landmarks=stream.render_landmarks if stream else [],
                 props=world3d.boxes,
                 npcs=stream.render_npcs if stream else [],
@@ -419,6 +451,7 @@ def main() -> None:
                 yaw=yaw,
                 pitch=pitch,
                 avatar=avatar,
+                camera_footprint=world3d.camera_footprint,
                 twin=session.twin if session else None,
                 photo=session.photo if session else None,
                 minds=session.simulation.minds if session else None,
