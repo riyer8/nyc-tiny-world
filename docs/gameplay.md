@@ -1,5 +1,8 @@
 # Gameplay
 
+Launch into the 3D city and you start facing Maya, the first quest NPC. Press
+**E** to begin *The Missing Camera*.
+
 ## Controls
 
 | Action | Keys |
@@ -12,7 +15,6 @@
 | Look around | **Click** to unlock, move mouse, **click** again to lock |
 | Interact | **E** |
 | Toggle geo debug | **G** |
-| Record trajectories | `--record` flag |
 | Quit | **Esc** |
 
 Controls also appear in the HUD at the bottom of the screen while playing.
@@ -21,10 +23,11 @@ Controls also appear in the HUD at the bottom of the screen while playing.
 
 ## Interactions & quests
 
-Walk up to subway entrances, cafes, buildings, NPCs, and objects. When you're close enough, a prompt appears — press **E** to interact.
+Walk up to subway entrances, cafes, buildings, NPCs, and objects. When you're
+close enough, a prompt appears; press **E** to interact.
 
 **Example quest: The Missing Camera**
-1. Talk to **Maya** (pink NPC near Washington Square spawn)
+1. Talk to **Maya** (pink NPC directly in front of spawn)
 2. Visit the **Village Cafe** (nearest cafe landmark)
 3. Talk to **Alex** for a clue
 4. Enter the **Jefferson Market Library**
@@ -51,9 +54,6 @@ The profile panel (top-right, below the mini-map) shows level, money, inventory,
 - ☕ Coffee + coffee token
 - Maya likes you more (+50%)
 
-Items have display names and emojis (`MetroCard`, `Camera`, `Coffee`, `Mysterious Key`). Relationships with NPCs persist — talk to Maya again after the quest and she remembers you helped.
-
-**Testing without the 3D window:**
-```bash
-pytest tests/test_profile.py tests/test_interactions.py tests/test_quests.py -v
-```
+Items have display names and emojis (`MetroCard`, `Camera`, `Coffee`,
+`Mysterious Key`). Relationships with NPCs persist; talk to Maya again after
+the quest and she remembers you helped.

@@ -1,4 +1,4 @@
-# Pillar 10 — City evolution & economy
+# City Evolution & Economy
 
 Weekly business simulation drives facade changes and an evolution journal.
 

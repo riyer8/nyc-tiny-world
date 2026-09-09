@@ -1,4 +1,4 @@
-# Pillar 4 — Procedural mystery
+# Mystery
 
 Each playthrough generates a seeded mystery solvable from the EventLog.
 

@@ -1,4 +1,4 @@
-# Pillar 3 — Procedural quest generation
+# Quests
 
 Quests spawn from NPC needs and the social graph — no LLM required.
 

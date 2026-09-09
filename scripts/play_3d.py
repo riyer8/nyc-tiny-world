@@ -172,6 +172,29 @@ def main() -> None:
         default=None,
         help="Pin the clock to this hour (0-23) for screenshots/demos",
     )
+    parser.add_argument(
+        "--start-x",
+        type=float,
+        default=None,
+        help="Start at this world X coordinate for screenshots/demos",
+    )
+    parser.add_argument(
+        "--start-z",
+        type=float,
+        default=None,
+        help="Start at this world Z coordinate for screenshots/demos",
+    )
+    parser.add_argument(
+        "--yaw-deg",
+        type=float,
+        default=None,
+        help="Initial camera yaw in degrees for screenshots/demos",
+    )
+    parser.add_argument(
+        "--hide-hud",
+        action="store_true",
+        help="Hide HUD panels for screenshots/demos",
+    )
     args = parser.parse_args()
     graphics: GraphicsProfile = get_profile(args.graphics)
 
@@ -190,9 +213,15 @@ def main() -> None:
     world = World.from_file(DEFAULT_MAP_PATH)
     world3d = World3D(world)
     px, py, pz = world3d.spawn
+    quest_spawn_x, _, quest_spawn_z = world3d.spawn
+    custom_start = args.start_x is not None or args.start_z is not None
+    if args.start_x is not None:
+        px = args.start_x
+    if args.start_z is not None:
+        pz = args.start_z
     prev_x, prev_z = px, pz
     frame_start_x, frame_start_z = px, pz
-    yaw = math.pi
+    yaw = math.radians(args.yaw_deg) if args.yaw_deg is not None else math.pi
     pitch = mouse_look.default_pitch
     jump = JumpState()
     avatar = PlayerAvatar(facing_yaw=camera_facing_yaw(yaw))
@@ -213,8 +242,8 @@ def main() -> None:
         feed_fixture = Path(args.feed_fixture) if args.feed_fixture else None
         session = GameSession(
             stream.city,
-            px,
-            pz,
+            quest_spawn_x,
+            quest_spawn_z,
             record_trajectories=args.record,
             save_slot=args.save_slot,
             load_save=not args.no_load,
@@ -231,10 +260,13 @@ def main() -> None:
         if args.record:
             print("Recording trajectories to data/trajectories/")
         print(f"Graphics: {graphics.name} (use --graphics normal for more detail)")
-        if not session._loaded_position:
+        if not session._loaded_position and not custom_start:
             yaw = apply_opening_beat(session, px, pz, yaw)
             session.update(px, pz, building_count=len(stream.render_buildings))
             print("Maya is in front of you — she's mid-conversation. Press E to help.")
+        elif custom_start:
+            session.update(px, pz, building_count=len(stream.render_buildings))
+            print(f"Demo start: x={px:.1f}, z={pz:.1f}, yaw={math.degrees(yaw):.0f}°")
         else:
             print("Quest: Walk to Maya (pink NPC) and press E to continue.")
         print(CONTROLS_HELP_3D)
@@ -580,7 +612,7 @@ def main() -> None:
                     minimap_timer = 0.0
             else:
                 session.hud.minimap = None
-            if not args.bench:
+            if not args.bench and not args.hide_hud:
                 draw_hud(width, height, session.hud)
 
             speed = "SPRINT" if movement.sprint else "walk"

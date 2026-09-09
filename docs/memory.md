@@ -1,4 +1,4 @@
-# Pillar 1 — Memory & relationships
+# Memory & Relationships
 
 NPCs remember player actions as structured facts and synthesize opinions for dialogue.
 

@@ -1,4 +1,4 @@
-# Pillar 6 — Subway simulation
+# Subway Simulation
 
 Graph-based subway travel with interior ride and GPS-correct exits.
 

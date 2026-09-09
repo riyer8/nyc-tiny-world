@@ -1,4 +1,4 @@
-# Pillar 11 — Photo mode
+# Photo Mode
 
 Free-fly camera with visual-only time/weather overrides and screenshots.
 

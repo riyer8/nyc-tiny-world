@@ -1,6 +1,7 @@
-# Pillar 2 — Utility-based agent brains
+# Agents
 
-All 48 NPCs use utility AI: needs drift, scored actions, and pathfinding goals.
+Spawned NPCs use utility AI: needs drift, scored actions, and pathfinding goals.
+The default graphics profile spawns 20 NPCs; `--graphics normal` spawns 48.
 
 ## Modules
 
@@ -17,4 +18,4 @@ Each `NPCState` includes personality summary, needs bars, current action, and pl
 
 ## Tests
 
-`tests/test_agent.py` — includes `test_all_npcs_have_agent_brains` (48 NPCs)
+`tests/test_agent.py`, `tests/test_agents.py`

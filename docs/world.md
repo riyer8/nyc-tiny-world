@@ -1,6 +1,7 @@
 # World
 
-**Current area:** ~500 m × 500 m around Washington Square Park (Greenwich Village, Manhattan).
+**Current area:** the playable spawn is Washington Square Park, with broader
+Greenwich Village building coverage around it.
 
 ## Geographic grounding
 
@@ -25,12 +26,13 @@ python3 scripts/generate_map.py --area washington_square
 
 ## Streaming world
 
-The game uses **concentric radii** around your real GPS position — not all of Manhattan at once:
+The game uses **concentric radii** around your real GPS position, so nearby
+streets and actors are detailed without drawing the whole city at once:
 
 | Radius | Distance | What's loaded |
 |--------|----------|-----------------|
 | Data | 5 miles | OSM tiles fetched/cached (`data/tiles/`) |
-| 3D render | 1 mile | Detailed building footprints |
+| 3D render | 450 m | Detailed building footprints |
 | Simulation | 300 m | NPCs, vehicles, traffic |
 | Interaction | 100 m | Quest objects, interiors |
 
@@ -66,9 +68,9 @@ loader.load_around(WASHINGTON_SQUARE.spawn_lat, WASHINGTON_SQUARE.spawn_lon, 804
 | Streets | OSM highways → roads, sidewalks, crosswalks, lane markings, traffic lights |
 | Buildings | Real OSM footprints — brick brownstones, glass towers, window grids |
 | Landmarks | Cafes, stores, parks, named buildings from OSM |
-| NPCs | 48 pedestrians with schedules — humanoid models on sidewalks |
-| Vehicles | 32 cars, taxis, buses, bikes — oriented meshes with wheels & lights |
-| Time & weather | Clock (starts 8:00 AM), sunrise/sunset, rain, fog, clouds |
+| NPCs | 20 by default, 48 in `--graphics normal`, with schedules and sidewalk movement |
+| Vehicles | 12 by default, 32 in `--graphics normal`, including cars, taxis, buses, bikes |
+| Time & weather | Clock (starts 8:00 AM), sunrise/sunset, sky gradient, rain, fog |
 | Interactions | E to interact with landmarks, NPCs, objects |
 | Quests | Adventure system with objectives, dialogue, rewards |
 | Progression | XP, money, inventory, NPC relationships |
@@ -84,11 +86,15 @@ Buildings use **OpenStreetMap tags** to pick NYC-like appearances:
 | `building=office` + tall | Glass curtain wall + reflective windows |
 | `building:colour` | Custom facade tint |
 | `start_date` before 1940 | Pre-war stone + trim bands |
-| `shop` / `amenity` on ground | Storefront glazing |
+| `shop` / street-level retail amenities | Storefront glazing |
 
-Facades get **per-story window grids**, directional shading, pitched or parapet roofs, and ground-floor retail glass.
+Facades get **per-story window grids**, directional shading, pitched or parapet
+roofs, ground-floor retail glass, and real photo textures for selected named
+landmarks.
 
-Vehicles are **oriented meshes** (body, cabin, wheels, headlights) that turn with traffic. Pedestrians are **humanoid** (head, torso, legs) with varied jacket colors — 48 NPCs including sidewalk wanderers.
+Vehicles are **oriented meshes** (body, cabin, wheels, headlights) that turn
+with traffic. Pedestrians are **humanoid** (head, torso, legs) with varied
+jacket colors.
 
 **More realism later:** NYC Open Data building footprints (1M+ buildings with roof heights) and Mapillary/street-level imagery can be layered on without changing the simulation architecture.
 

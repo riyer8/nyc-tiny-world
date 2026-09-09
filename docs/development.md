@@ -3,18 +3,19 @@
 ## Architecture
 
 ```
-🗽 NYC DATA (OSM)
-        ↓
-🌎 3D City Engine + Streaming LOD
-        ↓
-🎮 Simulation (WorldState, NPC minds, quests)
-        ↓
-📼 Trajectories (state, action, next_state)
-        ↓
-🧠 World Model → 🔮 Future Prediction
+OSM / feeds / saves
+        |
+3D city engine + streaming LOD
+        |
+Simulation (WorldState, NPC minds, quests)
+        |
+Trajectories (state, action, next_state)
+        |
+World model / what-if prediction
 ```
 
-Python owns data + simulation + ML. The Pygame/OpenGL layer is the current renderer — swap for Godot later without touching the simulation package.
+Python owns data, simulation, and rendering for the current build. The
+simulation state stays serializable so another renderer could consume it later.
 
 ## Project layout
 
@@ -42,7 +43,8 @@ pytest
 
 ## Roadmap
 
-- Godot renderer connected to `WorldState` JSON stream
-- Richer landmark models and subway fast-travel
-- Deeper NPC/vehicle AI with learned policies
-- Train larger world models on millions of trajectories
+- Record and link a short public walkthrough.
+- Improve immediate-mode OpenGL performance.
+- Add richer landmark silhouettes for the cafe, library, and subway entrances.
+- Expand NPC individuality beyond the key quest characters.
+- Train larger world models from recorded trajectories.

@@ -1,4 +1,4 @@
-# Pillar 8 — What-if / Imagine mode
+# What-If / Imagine Mode
 
 Rule-based world-model predictions inside twin mode.
 

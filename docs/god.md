@@ -1,4 +1,4 @@
-# Pillar 9 — God / sandbox mode
+# God / Sandbox Mode
 
 Direct city patches for laboratory experimentation.
 

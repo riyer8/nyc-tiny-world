@@ -1,4 +1,4 @@
-# Pillar 7 — Digital twin mode
+# Digital Twin Mode
 
 Elevated fly camera to observe the living simulation.
 
