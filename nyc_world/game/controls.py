@@ -8,8 +8,8 @@ from dataclasses import dataclass
 WALK_SPEED = 6.0
 SPRINT_MULTIPLIER = 2.5
 WORLD_SPEED_MULTIPLIER = 2.5
-JUMP_SPEED = 5.5
-GRAVITY = 18.0
+JUMP_SPEED = 7.5
+GRAVITY = 22.0
 MAX_PITCH = 1.4
 
 CONTROLS_HELP_2D = (
@@ -18,8 +18,9 @@ CONTROLS_HELP_2D = (
 
 CONTROLS_HELP_3D = (
     "Move: WASD/Arrows  ·  Sprint: F  ·  Jump: Space  ·  "
-    "Look: click + mouse  ·  Interact: E  ·  Twin: T  ·  Photo: P  ·  Imagine: I  ·  "
-    "God: ` or Shift+G  ·  Evolution: J  ·  Mystery: M  ·  Accuse: Y  ·  Subway: 1-6  ·  Esc: quit"
+    "Look: move mouse (click to lock cursor)  ·  Interact: E  ·  Twin: T  ·  Photo: P  ·  "
+    "Imagine: I  ·  God: ` or Shift+G  ·  Evolution: J  ·  Mystery: M  ·  Accuse: Y  ·  "
+    "Subway: 1-6  ·  Esc: quit"
 )
 
 # Backward-compatible alias for 2D scripts.
@@ -78,10 +79,10 @@ def read_movement(keys) -> MovementInput:
 
 @dataclass
 class MouseLook:
-    """Click-to-toggle camera orbit (third-person)."""
+    """Third-person camera orbit — active by default; click toggles cursor grab."""
 
-    active: bool = False
-    sensitivity: float = 0.0025
+    active: bool = True
+    sensitivity: float = 0.0038
     default_pitch: float = -0.28
 
     def toggle(self) -> bool:

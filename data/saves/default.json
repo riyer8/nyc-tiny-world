@@ -659,7 +659,7 @@
       "home_hour": 18,
       "hates_rain": true,
       "needs": {
-        "social": 0.974,
+        "social": 0.1360000000000001,
         "work": 0.7,
         "rest": 1.0,
         "comfort": 1.0,
@@ -701,7 +701,7 @@
       "home_hour": 22,
       "hates_rain": false,
       "needs": {
-        "social": 0.974,
+        "social": 0.1360000000000001,
         "work": 0.3,
         "rest": 1.0,
         "comfort": 0.4,
@@ -791,10 +791,10 @@
       }
     ]
   },
-  "player_x": 321.1309874095182,
-  "player_z": 411.0484260597309,
+  "player_x": 321.1369874095182,
+  "player_z": 415.7704260597309,
   "clock_hour": 8,
-  "clock_minute": 44,
+  "clock_minute": 45,
   "clock_weather": "rain",
   "agents": {
     "maya": {
@@ -808,7 +808,7 @@
         "ambition": 0.5604013958655203
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
         "social": 1.0,
         "money": 0.0
@@ -847,7 +847,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.55
       },
       "home": [
@@ -919,9 +919,9 @@
         "ambition": 0.3283951397649364
       },
       "needs": {
-        "hunger": 0.2259479999999999,
-        "energy": 0.946236,
-        "social": 0.8282619999999997,
+        "hunger": 0.6327239999999983,
+        "energy": 0.7428479999999995,
+        "social": 1.0,
         "money": 0.0
       },
       "home": [
@@ -956,9 +956,9 @@
         "ambition": 0.3545722087948704
       },
       "needs": {
-        "hunger": 0.22759999999999994,
-        "energy": 0.9114940000000002,
-        "social": 1.0,
+        "hunger": 0.6343759999999983,
+        "energy": 0.7081059999999998,
+        "social": 0.0022890000000000002,
         "money": 0.0
       },
       "home": [
@@ -995,7 +995,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -1032,7 +1032,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.55
       },
       "home": [
@@ -1069,7 +1069,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.169461,
+        "social": 0.4745429999999999,
         "money": 0.55
       },
       "home": [
@@ -1143,7 +1143,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -1180,7 +1180,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.4
       },
       "home": [
@@ -1217,7 +1217,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -1252,7 +1252,7 @@
         "ambition": 0.5007213563506502
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
         "social": 1.0,
         "money": 0.0
@@ -1289,8 +1289,8 @@
         "ambition": 0.5028508739878506
       },
       "needs": {
-        "hunger": 0.22759999999999994,
-        "energy": 0.9114940000000002,
+        "hunger": 0.6343759999999983,
+        "energy": 0.7081059999999998,
         "social": 1.0,
         "money": 0.0
       },
@@ -1365,7 +1365,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.4
       },
       "home": [
@@ -1439,7 +1439,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -1476,7 +1476,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.55
       },
       "home": [
@@ -1511,7 +1511,7 @@
         "ambition": 0.7284467590094409
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
         "social": 1.0,
         "money": 0.0
@@ -1550,7 +1550,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.4
       },
       "home": [
@@ -1585,9 +1585,9 @@
         "ambition": 0.3874267489938127
       },
       "needs": {
-        "hunger": 0.22759999999999994,
-        "energy": 0.9114940000000002,
-        "social": 0.0023940000000000003,
+        "hunger": 0.6343759999999983,
+        "energy": 0.7081059999999998,
+        "social": 0.30747599999999975,
         "money": 0.0
       },
       "home": [
@@ -1607,8 +1607,8 @@
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
+      "current_action": "seek_shelter",
+      "plan_summary": "walk \u2192 shelter",
       "goal_text": ""
     },
     "npc_22": {
@@ -1624,7 +1624,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -1661,7 +1661,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.4
       },
       "home": [
@@ -1698,7 +1698,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.55
       },
       "home": [
@@ -1735,7 +1735,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.55
       },
       "home": [
@@ -1809,7 +1809,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -1846,7 +1846,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.169461,
+        "social": 0.4745429999999999,
         "money": 0.4
       },
       "home": [
@@ -1883,7 +1883,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.169461,
+        "social": 0.4745429999999999,
         "money": 0.4
       },
       "home": [
@@ -1918,7 +1918,7 @@
         "ambition": 0.5007213563506502
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
         "social": 1.0,
         "money": 0.0
@@ -1957,7 +1957,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.55
       },
       "home": [
@@ -2029,9 +2029,9 @@
         "ambition": 0.3120643490382592
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
-        "social": 1.0,
+        "social": 0.001149,
         "money": 0.0
       },
       "home": [
@@ -2105,7 +2105,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.4
       },
       "home": [
@@ -2140,7 +2140,7 @@
         "ambition": 0.7006708381064893
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
         "social": 1.0,
         "money": 0.0
@@ -2177,7 +2177,7 @@
         "ambition": 0.7284467590094409
       },
       "needs": {
-        "hunger": 0.22759999999999994,
+        "hunger": 0.6343759999999983,
         "energy": 0.0,
         "social": 1.0,
         "money": 0.0
@@ -2251,8 +2251,8 @@
         "ambition": 0.35913373055554076
       },
       "needs": {
-        "hunger": 0.2248999999999999,
-        "energy": 0.9114940000000002,
+        "hunger": 0.6316759999999983,
+        "energy": 0.7081059999999998,
         "social": 1.0,
         "money": 0.0
       },
@@ -2290,7 +2290,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -2327,7 +2327,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -2362,9 +2362,9 @@
         "ambition": 0.7332184732863218
       },
       "needs": {
-        "hunger": 0.22759999999999994,
-        "energy": 0.9114940000000002,
-        "social": 1.0,
+        "hunger": 0.6343759999999983,
+        "energy": 0.7081059999999998,
+        "social": 0.0022890000000000002,
         "money": 0.0
       },
       "home": [
@@ -2401,7 +2401,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.1707,
+        "social": 0.47578199999999987,
         "money": 0.55
       },
       "home": [
@@ -2475,7 +2475,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -2512,7 +2512,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [
@@ -2549,7 +2549,7 @@
       "needs": {
         "hunger": 1.0,
         "energy": 0.0,
-        "social": 0.168675,
+        "social": 0.4737569999999999,
         "money": 0.4
       },
       "home": [

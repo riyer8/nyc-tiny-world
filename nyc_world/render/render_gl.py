@@ -193,7 +193,7 @@ def draw_box(box: Box3D) -> None:
     glEnd()
 
 
-from nyc_world.render.meshes import classify_building_details
+from nyc_world.render.meshes import classify_building_details, cull_buildings
 
 
 def draw_building(
@@ -330,6 +330,8 @@ def render_frame(
     pitch: float,
     *,
     far_buildings: list[Building3D] | None = None,
+    building_draw_radius_m: float | None = 200.0,
+    draw_far_skyline: bool = False,
     camera_footprint=None,
     avatar=None,
     twin=None,
@@ -358,12 +360,15 @@ def render_frame(
         )
 
     building_details = classify_building_details(buildings, px, pz)
+    visible_buildings = cull_buildings(
+        buildings, px, pz, max_radius_m=building_draw_radius_m
+    )
     if streets:
         draw_streets(streets, bright)
     from OpenGL.GL import GL_CULL_FACE, glDisable, glEnable
 
     glDisable(GL_CULL_FACE)
-    for building in buildings:
+    for building in visible_buildings:
         draw_building(
             building,
             bright,
@@ -371,7 +376,7 @@ def render_frame(
             player_z=pz,
             detail=building_details.get(id(building), "simple"),
         )
-    if far_buildings:
+    if draw_far_skyline and far_buildings:
         draw_far_buildings(far_buildings, bright, player_x=px, player_z=pz)
     glEnable(GL_CULL_FACE)
     for prop in props:

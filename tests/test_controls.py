@@ -42,8 +42,6 @@ def test_mouse_look_toggle_and_apply():
     from nyc_world.game.controls import MouseLook
 
     look = MouseLook()
-    assert not look.active
-    look.toggle()
     assert look.active
     yaw, pitch = look.apply(10, 5, 0.0, 0.0)
     assert yaw != 0.0

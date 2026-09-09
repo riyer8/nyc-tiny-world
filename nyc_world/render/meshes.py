@@ -86,6 +86,20 @@ def classify_building_details(
     return {id(building): classify_building_detail(building, px, pz) for building in buildings}
 
 
+def cull_buildings(
+    buildings: list[Building3D],
+    px: float,
+    pz: float,
+    *,
+    max_radius_m: float | None,
+) -> list[Building3D]:
+    """Keep only buildings near the player for rendering."""
+    if max_radius_m is None:
+        return list(buildings)
+    radius_sq = max_radius_m * max_radius_m
+    return [b for b in buildings if _building_dist_sq(b, px, pz) <= radius_sq]
+
+
 _compiled_impostors: dict[tuple[int, str], int] = {}
 
 

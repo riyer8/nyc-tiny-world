@@ -10,8 +10,8 @@ CAM_DISTANCE = 5.0
 CAM_HEIGHT = 2.4
 CAM_SIDE_OFFSET = 0.85
 CAM_LOOK_HEIGHT = 1.15  # look-at point on player (chest)
-MIN_PITCH = -0.55
-MAX_PITCH = 0.25
+MIN_PITCH = -0.42
+MAX_PITCH = 0.55
 
 
 def third_person_camera_eye(

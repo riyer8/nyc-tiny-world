@@ -66,30 +66,40 @@ from nyc_world.game.player_avatar import PlayerAvatar, camera_facing_yaw
 from nyc_world.geo import build_minimap, locate_player
 from nyc_world.paths import DEFAULT_MAP_PATH
 from nyc_world.render import draw_hud, render_frame, render_interior_frame, setup_gl
+from nyc_world.render.graphics import GraphicsProfile, get_profile
 from nyc_world.streaming import StreamingWorldManager
 
 FPS = 60
 
 
-def _warmup_render_cache(world3d: World3D, stream: StreamingWorldManager, px: float, pz: float) -> None:
+def _warmup_render_cache(
+    world3d: World3D,
+    stream: StreamingWorldManager,
+    px: float,
+    pz: float,
+    *,
+    graphics: GraphicsProfile,
+) -> None:
     """Pre-compile OpenGL display lists so the first gameplay frames stay smooth."""
-    import math
-
-    from nyc_world.render.meshes import classify_building_details, draw_building_detailed
+    from nyc_world.render.meshes import classify_building_details, cull_buildings, draw_building_detailed
 
     if stream.street_scene:
         from nyc_world.render.render_gl import draw_streets
 
         draw_streets(stream.street_scene, 1.0)
 
-    details = classify_building_details(stream.render_buildings, px, pz)
-    for building in stream.render_buildings:
+    visible = cull_buildings(
+        stream.render_buildings, px, pz, max_radius_m=graphics.building_draw_radius_m
+    )
+    details = classify_building_details(visible, px, pz)
+    for building in visible:
         detail = details.get(id(building), "simple")
         if detail in ("simple", "skyline"):
             draw_building_detailed(building, 1.0, detail=detail)
-    for building in stream.state.far_buildings[:250]:
-        draw_building_detailed(building, 1.0, detail="skyline")
-    print(f"Graphics cache ready ({len(stream.render_buildings)} buildings).")
+    if graphics.draw_far_skyline:
+        for building in stream.state.far_buildings[:250]:
+            draw_building_detailed(building, 1.0, detail="skyline")
+    print(f"Graphics cache ready ({len(visible)} nearby buildings).")
 
 
 def _set_mouse_look(active: bool) -> None:
@@ -126,7 +136,14 @@ def main() -> None:
         default="",
         help="Load feed data from a JSON fixture (e.g. tests/fixtures/feeds/mta_delay.json)",
     )
+    parser.add_argument(
+        "--graphics",
+        choices=("fast", "normal"),
+        default="fast",
+        help="Graphics preset: fast (default, smoother) or normal (more detail)",
+    )
     args = parser.parse_args()
+    graphics: GraphicsProfile = get_profile(args.graphics)
 
     if not DEFAULT_MAP_PATH.exists():
         print("No map found. Run: python3 scripts/generate_map.py")
@@ -136,7 +153,8 @@ def main() -> None:
     width, height = 960, 720
     screen = pygame.display.set_mode((width, height), OPENGL | DOUBLEBUF | RESIZABLE)
     pygame.display.set_caption("NYC Tiny World 3D")
-    _set_mouse_look(False)
+    mouse_look = MouseLook()
+    _set_mouse_look(mouse_look.active)
     setup_gl(width, height)
 
     world = World.from_file(DEFAULT_MAP_PATH)
@@ -145,8 +163,7 @@ def main() -> None:
     prev_x, prev_z = px, pz
     frame_start_x, frame_start_z = px, pz
     yaw = math.pi
-    pitch = MouseLook().default_pitch
-    mouse_look = MouseLook()
+    pitch = mouse_look.default_pitch
     jump = JumpState()
     avatar = PlayerAvatar(facing_yaw=camera_facing_yaw(yaw))
     show_geo_debug = False
@@ -160,6 +177,8 @@ def main() -> None:
             px,
             pz,
             world3d.buildings,
+            npc_count=graphics.npc_count,
+            vehicle_count=graphics.vehicle_count,
         )
         feed_fixture = Path(args.feed_fixture) if args.feed_fixture else None
         session = GameSession(
@@ -181,19 +200,20 @@ def main() -> None:
         print(f"Simulation: tick 0, minds={len(stream.city.mind_registry.minds)}")
         if args.record:
             print("Recording trajectories to data/trajectories/")
+        print(f"Graphics: {graphics.name} (use --graphics normal for more detail)")
         print("Quest: Walk to Maya (pink NPC near spawn) and press E to start.")
         print(CONTROLS_HELP_3D)
         print("Press G for location & simulation debug panel.")
         stream.update_player(px, pz)
-        _warmup_render_cache(world3d, stream, px, pz)
+        _warmup_render_cache(world3d, stream, px, pz, graphics=graphics)
 
     clock = pygame.time.Clock()
     running = True
     minimap_timer = 0.0
-    minimap_interval = 0.25  # rebuild mini-map 4×/sec, not every frame
+    minimap_interval = graphics.minimap_interval_s
 
     while running:
-        dt = clock.tick(FPS) / 1000.0
+        dt = min(clock.tick(FPS) / 1000.0, 0.05)
         frame_start_x, frame_start_z = px, pz
         building_count = len(stream.render_buildings) if stream else len(world3d.buildings)
 
@@ -355,6 +375,11 @@ def main() -> None:
         in_interior = session is not None and session.in_interior
         in_twin = session is not None and session.in_twin
         in_photo = session is not None and session.in_photo
+
+        # Jump works on key-down and while held (helps when frame rate is low).
+        if keys[K_SPACE] and jump.on_ground and not in_twin and not in_photo and not in_subway_menu:
+            jump.start_jump()
+
         speed_mult = world_speed_multiplier(movement.sprint)
 
         twin_time_scale = 1.0
@@ -399,7 +424,7 @@ def main() -> None:
             elif in_subway and session:
                 px, pz = session.subway_spawn()
 
-        jump_height = jump.update(dt)
+        feet_y = jump.update(dt)
         avatar.update(
             dt,
             moving=movement.active and not in_photo,
@@ -408,7 +433,6 @@ def main() -> None:
             move_z=move_z,
             camera_yaw=yaw,
         )
-        ground_y = jump_height
         if in_photo and session:
             cam = session.photo.camera
             vertical = 0.0
@@ -417,7 +441,7 @@ def main() -> None:
             if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
                 vertical -= 1.0
             cam.move(movement.forward, movement.strafe, vertical, dt)
-            px, ground_y, pz = cam.x, cam.y, cam.z
+            px, feet_y, pz = cam.x, cam.y, cam.z
         from nyc_world.city.world_clock import WorldClock
 
         sim_clock = stream.clock if stream else None
@@ -429,7 +453,7 @@ def main() -> None:
             render_interior_frame(
                 session.current_interior.build_boxes(),
                 px,
-                ground_y,
+                feet_y,
                 pz,
                 yaw,
                 pitch,
@@ -441,12 +465,14 @@ def main() -> None:
                 streets=stream.street_scene if stream else None,
                 buildings=stream.render_buildings if stream else world3d.buildings,
                 far_buildings=stream.state.far_buildings if stream else None,
+                building_draw_radius_m=graphics.building_draw_radius_m,
+                draw_far_skyline=graphics.draw_far_skyline,
                 landmarks=stream.render_landmarks if stream else [],
                 props=world3d.boxes,
                 npcs=stream.render_npcs if stream else [],
                 vehicles=stream.render_vehicles if stream else [],
                 px=px,
-                py=ground_y,
+                py=feet_y,
                 pz=pz,
                 yaw=yaw,
                 pitch=pitch,
@@ -466,7 +492,7 @@ def main() -> None:
                 dx=px - frame_start_x,
                 dz=pz - frame_start_z,
                 sprint=movement.sprint,
-                jumped=jump.height > 0.0 or jump.velocity > 0.0,
+                jumped=jump.height > 0.05 or jump.velocity > 0.0,
                 building_count=building_count,
                 dt=dt,
             )

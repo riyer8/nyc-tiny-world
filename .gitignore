@@ -24,3 +24,4 @@ data/feeds/latest.json
 # manifest.json stays tracked as the index; images are downloaded locally.
 data/facades/*.jpg
 data/facades/image_titles.json
+.cursor/
