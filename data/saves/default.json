@@ -30,34 +30,6 @@
       "npc_17": -0.16000000000000003,
       "npc_18": -0.16000000000000003,
       "npc_19": -0.16000000000000003,
-      "npc_20": -0.16000000000000003,
-      "npc_21": -0.16000000000000003,
-      "npc_22": -0.16000000000000003,
-      "npc_23": -0.16000000000000003,
-      "npc_24": -0.16000000000000003,
-      "npc_25": -0.16000000000000003,
-      "npc_26": -0.16000000000000003,
-      "npc_27": -0.16000000000000003,
-      "npc_28": -0.16000000000000003,
-      "npc_29": -0.16000000000000003,
-      "npc_30": -0.16000000000000003,
-      "npc_31": -0.16000000000000003,
-      "npc_32": -0.16000000000000003,
-      "npc_33": -0.16000000000000003,
-      "npc_34": -0.16000000000000003,
-      "npc_35": -0.16000000000000003,
-      "npc_36": -0.16000000000000003,
-      "npc_37": -0.16000000000000003,
-      "npc_38": -0.16000000000000003,
-      "npc_39": -0.16000000000000003,
-      "npc_40": -0.16000000000000003,
-      "npc_41": -0.16000000000000003,
-      "npc_42": -0.16000000000000003,
-      "npc_43": -0.16000000000000003,
-      "npc_44": -0.16000000000000003,
-      "npc_45": -0.16000000000000003,
-      "npc_46": -0.16000000000000003,
-      "npc_47": -0.16000000000000003,
       "jordan": -0.16000000000000003
     }
   },
@@ -302,342 +274,6 @@
       "friendship": 30.0,
       "facts": []
     },
-    "npc_20": {
-      "npc_id": "npc_20",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_21": {
-      "npc_id": "npc_21",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_22": {
-      "npc_id": "npc_22",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_23": {
-      "npc_id": "npc_23",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_24": {
-      "npc_id": "npc_24",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_25": {
-      "npc_id": "npc_25",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_26": {
-      "npc_id": "npc_26",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_27": {
-      "npc_id": "npc_27",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_28": {
-      "npc_id": "npc_28",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_29": {
-      "npc_id": "npc_29",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_30": {
-      "npc_id": "npc_30",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_31": {
-      "npc_id": "npc_31",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_32": {
-      "npc_id": "npc_32",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_33": {
-      "npc_id": "npc_33",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_34": {
-      "npc_id": "npc_34",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_35": {
-      "npc_id": "npc_35",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_36": {
-      "npc_id": "npc_36",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_37": {
-      "npc_id": "npc_37",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_38": {
-      "npc_id": "npc_38",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_39": {
-      "npc_id": "npc_39",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_40": {
-      "npc_id": "npc_40",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_41": {
-      "npc_id": "npc_41",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_42": {
-      "npc_id": "npc_42",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_43": {
-      "npc_id": "npc_43",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_44": {
-      "npc_id": "npc_44",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_45": {
-      "npc_id": "npc_45",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_46": {
-      "npc_id": "npc_46",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
-    "npc_47": {
-      "npc_id": "npc_47",
-      "met_tick": 0,
-      "met_day": 1,
-      "met_time": "",
-      "visit_count": 0,
-      "last_seen_tick": 0,
-      "last_seen_time": "",
-      "trust": 50.0,
-      "friendship": 30.0,
-      "facts": []
-    },
     "jordan": {
       "npc_id": "jordan",
       "met_tick": 0,
@@ -659,18 +295,13 @@
       "home_hour": 18,
       "hates_rain": true,
       "needs": {
-        "social": 0.1360000000000001,
+        "social": 1.0,
         "work": 0.7,
-        "rest": 1.0,
-        "comfort": 1.0,
+        "rest": 0.7600000000000003,
+        "comfort": 0.5,
         "money": 1.0
       },
       "goals": [
-        {
-          "id": "seek_shelter",
-          "description": "Stay dry at cafe_village",
-          "priority": 0.85
-        },
         {
           "id": "earn_rent",
           "description": "Earn enough for rent",
@@ -692,7 +323,7 @@
       "npc_relationships": {
         "alex": 0.72
       },
-      "mood": 0.0
+      "mood": 1.0
     },
     "alex": {
       "npc_id": "alex",
@@ -701,11 +332,11 @@
       "home_hour": 22,
       "hates_rain": false,
       "needs": {
-        "social": 0.1360000000000001,
+        "social": 1.0,
         "work": 0.3,
-        "rest": 1.0,
+        "rest": 0.9600000000000003,
         "comfort": 0.4,
-        "money": 1.0
+        "money": 0.889999999999986
       },
       "goals": [
         {
@@ -791,11 +422,11 @@
       }
     ]
   },
-  "player_x": 321.1369874095182,
-  "player_z": 415.7704260597309,
+  "player_x": 267.56892268368483,
+  "player_z": 277.43961440798506,
   "clock_hour": 8,
-  "clock_minute": 45,
-  "clock_weather": "rain",
+  "clock_minute": 0,
+  "clock_weather": "clear",
   "agents": {
     "maya": {
       "npc_id": "maya",
@@ -808,22 +439,22 @@
         "ambition": 0.5604013958655203
       },
       "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.0
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
+        "money": 0.72
       },
       "home": [
-        262.73462850446657,
-        260.73462850446657
+        258.63462850446655,
+        259.8346285044666
       ],
       "workplace": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
@@ -832,7 +463,7 @@
       "home_hour": 18,
       "current_action": "work",
       "plan_summary": "walk \u2192 workplace",
-      "goal_text": "Stay dry at cafe_village"
+      "goal_text": "Earn enough for rent"
     },
     "alex": {
       "npc_id": "alex",
@@ -845,9 +476,9 @@
         "ambition": 0.7183644791049847
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.55
       },
       "home": [
@@ -855,20 +486,20 @@
         242.73462850446657
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 22,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": "Get to class on time"
     },
     "npc_2": {
@@ -882,9 +513,9 @@
         "ambition": 0.44423948489281295
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -892,20 +523,20 @@
         142.28390269707165
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_3": {
@@ -919,30 +550,30 @@
         "ambition": 0.3283951397649364
       },
       "needs": {
-        "hunger": 0.6327239999999983,
-        "energy": 0.7428479999999995,
-        "social": 1.0,
-        "money": 0.0
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.1269009999999971,
+        "money": 0.4
       },
       "home": [
         226.69616690490682,
         266.45029227054675
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": ""
     },
     "npc_4": {
@@ -956,30 +587,30 @@
         "ambition": 0.3545722087948704
       },
       "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.7081059999999998,
-        "social": 0.0022890000000000002,
-        "money": 0.0
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
+        "money": 0.4
       },
       "home": [
         191.3048538028939,
         191.04734974734635
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_5": {
@@ -993,9 +624,9 @@
         "ambition": 0.16027418879203736
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1003,20 +634,20 @@
         451.78680709333133
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_6": {
@@ -1030,9 +661,9 @@
         "ambition": 0.5284109290184006
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.55
       },
       "home": [
@@ -1040,20 +671,20 @@
         185.15943467037144
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_7": {
@@ -1067,9 +698,9 @@
         "ambition": 0.6984302250309782
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4745429999999999,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.55
       },
       "home": [
@@ -1077,20 +708,20 @@
         283.6492021014854
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": ""
     },
     "npc_8": {
@@ -1104,9 +735,9 @@
         "ambition": 0.20593659921170193
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1114,20 +745,20 @@
         125.29527554756595
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_9": {
@@ -1141,9 +772,9 @@
         "ambition": 0.5256309575437518
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1151,20 +782,20 @@
         56.3336235787125
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": ""
     },
     "npc_10": {
@@ -1178,9 +809,9 @@
         "ambition": 0.3790079882858559
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1188,20 +819,20 @@
         419.8902445877292
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": ""
     },
     "npc_11": {
@@ -1215,9 +846,9 @@
         "ambition": 0.2306663211676548
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1225,20 +856,20 @@
         255.94722571329478
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_12": {
@@ -1252,30 +883,30 @@
         "ambition": 0.5007213563506502
       },
       "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.0
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
+        "money": 0.55
       },
       "home": [
         369.42387673418625,
         -3.36452290135319
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_13": {
@@ -1289,30 +920,30 @@
         "ambition": 0.5028508739878506
       },
       "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.7081059999999998,
-        "social": 1.0,
-        "money": 0.0
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
+        "money": 0.55
       },
       "home": [
         53.43910091580808,
         285.06584332314924
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_14": {
@@ -1326,9 +957,9 @@
         "ambition": 0.17404392107693442
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1336,20 +967,20 @@
         41.9679961911015
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_15": {
@@ -1363,9 +994,9 @@
         "ambition": 0.3120643490382592
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1373,20 +1004,20 @@
         496.6655582939005
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": ""
     },
     "npc_16": {
@@ -1400,9 +1031,9 @@
         "ambition": 0.42659350187030765
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1410,20 +1041,20 @@
         107.10028985704294
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     },
     "npc_17": {
@@ -1437,9 +1068,9 @@
         "ambition": 0.16235546044020696
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.4
       },
       "home": [
@@ -1447,20 +1078,20 @@
         291.0755010057436
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
+      "current_action": "socialize",
+      "plan_summary": "walk \u2192 park \u2192 mingle",
       "goal_text": ""
     },
     "npc_18": {
@@ -1474,9 +1105,9 @@
         "ambition": 0.7006708381064893
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.55
       },
       "home": [
@@ -1484,20 +1115,20 @@
         555.2348187998754
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "work",
+      "plan_summary": "walk \u2192 workplace",
       "goal_text": ""
     },
     "npc_19": {
@@ -1511,1066 +1142,30 @@
         "ambition": 0.7284467590094409
       },
       "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.0
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
+        "money": 0.55
       },
       "home": [
         355.07558844497436,
         238.20600791465728
       ],
       "workplace": [
-        331.1971291718987,
-        64.95705809860496
+        322.0855559967364,
+        52.48213025802673
       ],
       "cafe": [
-        171.1188231455441,
-        65.03268608045482
+        131.1540461819977,
+        128.33884067154
       ],
       "park": [
         222.27204064032358,
         259.77437051490125
       ],
       "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_20": {
-      "npc_id": "npc_20",
-      "display_name": "Npc 20",
-      "personality": {
-        "extroversion": 0.6993140129375957,
-        "curiosity": 0.85,
-        "kindness": 0.49042029896615935,
-        "risk_tolerance": 0.5891796562876664,
-        "ambition": 0.35389746854850046
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
-        "money": 0.4
-      },
-      "home": [
-        266.4148762397319,
-        195.58502866069705
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_21": {
-      "npc_id": "npc_21",
-      "display_name": "Npc 21",
-      "personality": {
-        "extroversion": 0.38389666021880386,
-        "curiosity": 0.3262420419223424,
-        "kindness": 0.5873115622432428,
-        "risk_tolerance": 0.3968683087387179,
-        "ambition": 0.3874267489938127
-      },
-      "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.7081059999999998,
-        "social": 0.30747599999999975,
-        "money": 0.0
-      },
-      "home": [
-        227.4004294292784,
-        246.3295599196809
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_22": {
-      "npc_id": "npc_22",
-      "display_name": "Npc 22",
-      "personality": {
-        "extroversion": 0.3739406291812871,
-        "curiosity": 0.5238170148327771,
-        "kindness": 0.3986490260265012,
-        "risk_tolerance": 0.27263569190502623,
-        "ambition": 0.2741865965071444
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        371.0275588671537,
-        444.9802887236985
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_23": {
-      "npc_id": "npc_23",
-      "display_name": "Npc 23",
-      "personality": {
-        "extroversion": 0.5302021320483818,
-        "curiosity": 0.3692027964893964,
-        "kindness": 0.4239305958192397,
-        "risk_tolerance": 0.3261922692407806,
-        "ambition": 0.20211326999399376
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
-        "money": 0.4
-      },
-      "home": [
-        157.35600611021061,
-        260.6619847790585
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_24": {
-      "npc_id": "npc_24",
-      "display_name": "Npc 24",
-      "personality": {
-        "extroversion": 0.3690156359434391,
-        "curiosity": 0.2847054145628971,
-        "kindness": 0.5783765273271527,
-        "risk_tolerance": 0.4401911266679519,
-        "ambition": 0.7332184732863218
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.55
-      },
-      "home": [
-        171.37337586441197,
-        307.1676598827243
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_25": {
-      "npc_id": "npc_25",
-      "display_name": "Npc 25",
-      "personality": {
-        "extroversion": 0.4483087884705554,
-        "curiosity": 0.22573085485134706,
-        "kindness": 0.5867756163477674,
-        "risk_tolerance": 0.4287749237227255,
-        "ambition": 0.7194104936730799
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.55
-      },
-      "home": [
-        171.37337586441197,
-        307.1676598827243
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_26": {
-      "npc_id": "npc_26",
-      "display_name": "Npc 26",
-      "personality": {
-        "extroversion": 0.6680138395327448,
-        "curiosity": 0.85,
-        "kindness": 0.697602981440345,
-        "risk_tolerance": 0.4740210582087989,
-        "ambition": 0.37924530673575685
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.4
-      },
-      "home": [
-        142.88892655171136,
-        403.11190011887004
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
-      "goal_text": ""
-    },
-    "npc_27": {
-      "npc_id": "npc_27",
-      "display_name": "Npc 27",
-      "personality": {
-        "extroversion": 0.58936872830299,
-        "curiosity": 0.3570646676010608,
-        "kindness": 0.775944753915565,
-        "risk_tolerance": 0.3838953415942082,
-        "ambition": 0.47308793501833846
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        374.6506925755943,
-        79.66393369786505
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_28": {
-      "npc_id": "npc_28",
-      "display_name": "Npc 28",
-      "personality": {
-        "extroversion": 0.4789618770170079,
-        "curiosity": 0.5480232797988571,
-        "kindness": 0.4442038896138306,
-        "risk_tolerance": 0.2775885816508626,
-        "ambition": 0.2711238251590564
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4745429999999999,
-        "money": 0.4
-      },
-      "home": [
-        304.80991143210315,
-        393.8373271211954
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_29": {
-      "npc_id": "npc_29",
-      "display_name": "Npc 29",
-      "personality": {
-        "extroversion": 0.6146927182641507,
-        "curiosity": 0.620863299414961,
-        "kindness": 0.3983330489067531,
-        "risk_tolerance": 0.27280843369533125,
-        "ambition": 0.4285865008040417
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4745429999999999,
-        "money": 0.4
-      },
-      "home": [
-        584.9791196158161,
-        119.19707778837181
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_30": {
-      "npc_id": "npc_30",
-      "display_name": "Npc 30",
-      "personality": {
-        "extroversion": 0.2909128259969479,
-        "curiosity": 0.4004075726744243,
-        "kindness": 0.56513697651261,
-        "risk_tolerance": 0.2544399724358365,
-        "ambition": 0.5007213563506502
-      },
-      "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.0
-      },
-      "home": [
-        148.1921082080563,
-        372.4991687204253
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_31": {
-      "npc_id": "npc_31",
-      "display_name": "Npc 31",
-      "personality": {
-        "extroversion": 0.3283288133872382,
-        "curiosity": 0.41161507318423374,
-        "kindness": 0.38613833737621983,
-        "risk_tolerance": 0.43760708829996997,
-        "ambition": 0.5028508739878506
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
-        "money": 0.55
-      },
-      "home": [
-        355.6186342469139,
-        454.642224555219
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_32": {
-      "npc_id": "npc_32",
-      "display_name": "Npc 32",
-      "personality": {
-        "extroversion": 0.5934780008832115,
-        "curiosity": 0.85,
-        "kindness": 0.6801853056243121,
-        "risk_tolerance": 0.6360923703014782,
-        "ambition": 0.17404392107693442
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.4
-      },
-      "home": [
-        491.3291741077403,
-        -292.160116940355
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_33": {
-      "npc_id": "npc_33",
-      "display_name": "Npc 33",
-      "personality": {
-        "extroversion": 0.4829445194310399,
-        "curiosity": 0.38594607945137915,
-        "kindness": 0.5527293202529443,
-        "risk_tolerance": 0.4816286282695785,
-        "ambition": 0.3120643490382592
-      },
-      "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 0.001149,
-        "money": 0.0
-      },
-      "home": [
-        171.37337586441197,
-        307.1676598827243
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
-      "goal_text": ""
-    },
-    "npc_34": {
-      "npc_id": "npc_34",
-      "display_name": "Npc 34",
-      "personality": {
-        "extroversion": 0.3640346070937843,
-        "curiosity": 0.5646472206734532,
-        "kindness": 0.5785302907951413,
-        "risk_tolerance": 0.36426474434944994,
-        "ambition": 0.42659350187030765
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.4
-      },
-      "home": [
-        597.5709941409809,
-        270.965836164551
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_35": {
-      "npc_id": "npc_35",
-      "display_name": "Npc 35",
-      "personality": {
-        "extroversion": 0.5170321518044556,
-        "curiosity": 0.3984107996717599,
-        "kindness": 0.4875614942702065,
-        "risk_tolerance": 0.4138262374873687,
-        "ambition": 0.16235546044020696
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
-        "money": 0.4
-      },
-      "home": [
-        267.2549002136841,
-        210.31588386359388
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_36": {
-      "npc_id": "npc_36",
-      "display_name": "Npc 36",
-      "personality": {
-        "extroversion": 0.27188238944496457,
-        "curiosity": 0.21138816211461964,
-        "kindness": 0.4678448149529968,
-        "risk_tolerance": 0.2750936892623196,
-        "ambition": 0.7006708381064893
-      },
-      "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.0
-      },
-      "home": [
-        -25.302540319617115,
-        434.8535174906191
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_37": {
-      "npc_id": "npc_37",
-      "display_name": "Npc 37",
-      "personality": {
-        "extroversion": 0.3513777695180217,
-        "curiosity": 0.37502668318449117,
-        "kindness": 0.4602216915673421,
-        "risk_tolerance": 0.26228423080501434,
-        "ambition": 0.7284467590094409
-      },
-      "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.0
-      },
-      "home": [
-        245.24457506629116,
-        288.49677128175557
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_38": {
-      "npc_id": "npc_38",
-      "display_name": "Npc 38",
-      "personality": {
-        "extroversion": 0.7352959513279107,
-        "curiosity": 0.85,
-        "kindness": 0.5039357534179254,
-        "risk_tolerance": 0.6217795927048511,
-        "ambition": 0.17740642707711396
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.4
-      },
-      "home": [
-        215.8013105103511,
-        336.8949905175308
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
-      "goal_text": ""
-    },
-    "npc_39": {
-      "npc_id": "npc_39",
-      "display_name": "Npc 39",
-      "personality": {
-        "extroversion": 0.3736920019826585,
-        "curiosity": 0.3625225110186299,
-        "kindness": 0.6889517249237381,
-        "risk_tolerance": 0.390865614679878,
-        "ambition": 0.35913373055554076
-      },
-      "needs": {
-        "hunger": 0.6316759999999983,
-        "energy": 0.7081059999999998,
-        "social": 1.0,
-        "money": 0.0
-      },
-      "home": [
-        131.2134418166414,
-        241.84721855469652
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
-      "goal_text": ""
-    },
-    "npc_40": {
-      "npc_id": "npc_40",
-      "display_name": "Npc 40",
-      "personality": {
-        "extroversion": 0.3739406291812871,
-        "curiosity": 0.5238170148327771,
-        "kindness": 0.3986490260265012,
-        "risk_tolerance": 0.27263569190502623,
-        "ambition": 0.2741865965071444
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        -89.22921328003348,
-        -84.89886571119486
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_41": {
-      "npc_id": "npc_41",
-      "display_name": "Npc 41",
-      "personality": {
-        "extroversion": 0.5302021320483818,
-        "curiosity": 0.3692027964893964,
-        "kindness": 0.4239305958192397,
-        "risk_tolerance": 0.3261922692407806,
-        "ambition": 0.20211326999399376
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        75.4409409718486,
-        564.8082145555826
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_42": {
-      "npc_id": "npc_42",
-      "display_name": "Npc 42",
-      "personality": {
-        "extroversion": 0.3690156359434391,
-        "curiosity": 0.2847054145628971,
-        "kindness": 0.5783765273271527,
-        "risk_tolerance": 0.4401911266679519,
-        "ambition": 0.7332184732863218
-      },
-      "needs": {
-        "hunger": 0.6343759999999983,
-        "energy": 0.7081059999999998,
-        "social": 0.0022890000000000002,
-        "money": 0.0
-      },
-      "home": [
-        283.40202772129345,
-        301.00305706627694
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
-      "goal_text": ""
-    },
-    "npc_43": {
-      "npc_id": "npc_43",
-      "display_name": "Npc 43",
-      "personality": {
-        "extroversion": 0.4483087884705554,
-        "curiosity": 0.22573085485134706,
-        "kindness": 0.5867756163477674,
-        "risk_tolerance": 0.4287749237227255,
-        "ambition": 0.7194104936730799
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.47578199999999987,
-        "money": 0.55
-      },
-      "home": [
-        253.9587631641476,
-        227.79148143321856
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_44": {
-      "npc_id": "npc_44",
-      "display_name": "Npc 44",
-      "personality": {
-        "extroversion": 0.6680138395327448,
-        "curiosity": 0.85,
-        "kindness": 0.697602981440345,
-        "risk_tolerance": 0.4740210582087989,
-        "ambition": 0.37924530673575685
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
-        "money": 0.4
-      },
-      "home": [
-        -9.74088406709201,
-        35.34962548355496
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "socialize",
-      "plan_summary": "walk \u2192 park \u2192 mingle",
-      "goal_text": ""
-    },
-    "npc_45": {
-      "npc_id": "npc_45",
-      "display_name": "Npc 45",
-      "personality": {
-        "extroversion": 0.58936872830299,
-        "curiosity": 0.3570646676010608,
-        "kindness": 0.775944753915565,
-        "risk_tolerance": 0.3838953415942082,
-        "ambition": 0.47308793501833846
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        346.8789908762061,
-        67.30152553673699
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
-      "goal_text": ""
-    },
-    "npc_46": {
-      "npc_id": "npc_46",
-      "display_name": "Npc 46",
-      "personality": {
-        "extroversion": 0.4789618770170079,
-        "curiosity": 0.5480232797988571,
-        "kindness": 0.4442038896138306,
-        "risk_tolerance": 0.2775885816508626,
-        "ambition": 0.2711238251590564
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        -113.02140746311905,
-        570.4083743849844
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
-      "goal_text": ""
-    },
-    "npc_47": {
-      "npc_id": "npc_47",
-      "display_name": "Npc 47",
-      "personality": {
-        "extroversion": 0.6146927182641507,
-        "curiosity": 0.620863299414961,
-        "kindness": 0.3983330489067531,
-        "risk_tolerance": 0.27280843369533125,
-        "ambition": 0.4285865008040417
-      },
-      "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 0.4737569999999999,
-        "money": 0.4
-      },
-      "home": [
-        291.5816551085627,
-        325.307308024881
-      ],
-      "workplace": [
-        331.1971291718987,
-        64.95705809860496
-      ],
-      "cafe": [
-        171.1188231455441,
-        65.03268608045482
-      ],
-      "park": [
-        222.27204064032358,
-        259.77437051490125
-      ],
-      "home_hour": 18,
-      "current_action": "seek_shelter",
-      "plan_summary": "walk \u2192 shelter",
+      "current_action": "work",
+      "plan_summary": "walk \u2192 workplace",
       "goal_text": ""
     },
     "jordan": {
@@ -2584,9 +1179,9 @@
         "ambition": 0.5
       },
       "needs": {
-        "hunger": 1.0,
-        "energy": 0.0,
-        "social": 1.0,
+        "hunger": 0.33586799999999606,
+        "energy": 0.482066000000002,
+        "social": 0.4269009999999971,
         "money": 0.35
       },
       "home": [
@@ -2606,8 +1201,8 @@
         267.73462850446657
       ],
       "home_hour": 18,
-      "current_action": "eat",
-      "plan_summary": "walk \u2192 cafe \u2192 eat",
+      "current_action": "explore",
+      "plan_summary": "walk \u2192 explore sights",
       "goal_text": ""
     }
   },

@@ -49,10 +49,54 @@ def _draw_quad_y(
 # Distance-based building detail (meters from player to footprint AABB).
 DETAIL_FULL_M = 55.0
 DETAIL_MEDIUM_M = 130.0
-MAX_WINDOW_STORIES = 3
-MAX_WINDOW_COLS = 2
-SKIP_WINDOWS_BELOW_M = 12.0
+STORY_HEIGHT_M = 3.2
+# Caps are high enough that a 40-story tower still gets a real window grid.
+MAX_WINDOW_STORIES_FULL = 60
+MAX_WINDOW_COLS_FULL = 16
+MAX_WINDOW_STORIES_MEDIUM = 10
+SKIP_WINDOWS_BELOW_M = 4.0
 MAX_SKYLINE_BUILDINGS = 250
+
+
+def window_grid(
+    building: Building3D,
+    wall_length: float,
+    *,
+    detail: str = "full",
+) -> tuple[int, int]:
+    """Return (stories, columns) so window rows follow building height."""
+    stories = building.levels or max(1, int(building.height / STORY_HEIGHT_M))
+    stories = max(1, stories)
+    if detail == "full":
+        cols = min(max(1, int(wall_length / 2.8)), MAX_WINDOW_COLS_FULL)
+        return min(stories, MAX_WINDOW_STORIES_FULL), cols
+    if detail == "medium":
+        return min(stories, MAX_WINDOW_STORIES_MEDIUM), 1
+    return min(stories, 2), 1
+
+
+def count_window_quads(
+    buildings: list[Building3D],
+    px: float,
+    pz: float,
+) -> dict[str, int]:
+    """Estimate window quads near the player (perf sanity check)."""
+    counts = {"full": 0, "medium": 0, "simple": 0}
+    details = classify_building_details(buildings, px, pz)
+    for building in buildings:
+        detail = details.get(id(building), "simple")
+        if building.height < SKIP_WINDOWS_BELOW_M and detail != "simple":
+            continue
+        fp = building.footprint
+        for i in range(len(fp)):
+            x0, z0 = fp[i]
+            x1, z1 = fp[(i + 1) % len(fp)]
+            length = math.hypot(x1 - x0, z1 - z0)
+            if length < 0.5:
+                continue
+            stories, cols = window_grid(building, length, detail=detail)
+            counts[detail] = counts.get(detail, 0) + stories * cols
+    return counts
 
 
 def _building_bounds(building: Building3D) -> tuple[float, float, float, float]:
@@ -153,7 +197,7 @@ def draw_building_detailed(
     roof = (building.roof_r, building.roof_g, building.roof_b)
     trim = (building.trim_r, building.trim_g, building.trim_b)
     window = (building.window_r, building.window_g, building.window_b)
-    story_h = 3.2
+    story_h = STORY_HEIGHT_M
     draw_windows = detail == "full" and h >= SKIP_WINDOWS_BELOW_M
 
     facade_tex: int | None = None
@@ -196,9 +240,9 @@ def draw_building_detailed(
             continue
 
         if draw_windows:
-            stories = min(building.levels or max(1, int(h / story_h)), MAX_WINDOW_STORIES)
-            cols = min(max(1, int(length / 2.8)), MAX_WINDOW_COLS)
-            for s in range(stories):
+            stories, cols = window_grid(building, length, detail="full")
+            start = 1 if building.has_storefront and stories > 1 else 0
+            for s in range(start, stories):
                 y0 = s * story_h + 0.6
                 y1 = min(h - 0.3, y0 + story_h * 0.55)
                 if y1 <= y0:
@@ -222,7 +266,7 @@ def draw_building_detailed(
                     )
         elif detail == "medium" and h >= SKIP_WINDOWS_BELOW_M:
             # One band per floor — cheap but reads as windows at distance.
-            stories = min(building.levels or max(1, int(h / story_h)), MAX_WINDOW_STORIES)
+            stories, _ = window_grid(building, length, detail="medium")
             for s in range(stories):
                 y0 = s * story_h + 0.7
                 y1 = min(h - 0.3, y0 + story_h * 0.4)
@@ -291,7 +335,7 @@ def draw_building_impostor(
     roof = (building.roof_r, building.roof_g, building.roof_b)
     window = (building.window_r, building.window_g, building.window_b)
     trim = (building.trim_r, building.trim_g, building.trim_b)
-    story_h = 3.2
+    story_h = STORY_HEIGHT_M
 
     for i in range(len(fp)):
         x0, z0 = fp[i]
@@ -306,7 +350,7 @@ def draw_building_impostor(
         _draw_quad_y(x0, 0, z0, x1, 0, z1, x1, h, z1, x0, h, z0, wr, wg, wb)
 
         if not skyline:
-            stories = min(building.levels or max(1, int(h / story_h)), 2)
+            stories, _ = window_grid(building, length, detail="simple")
             for s in range(stories):
                 y0 = s * story_h + 0.8
                 y1 = min(h - 0.4, y0 + story_h * 0.45)

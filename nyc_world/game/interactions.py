@@ -256,9 +256,13 @@ def assign_quest_npcs(npcs: list[NPC], spawn_x: float, spawn_z: float) -> None:
     if not npcs:
         return
     npcs[0].name = "maya"
-    npcs[0].x = spawn_x + 5
-    npcs[0].z = spawn_z + 3
+    # Close enough that the interact prompt is up on the first frame.
+    npcs[0].x = spawn_x + 0.9
+    npcs[0].z = spawn_z + 2.1
     npcs[0].color = (0.85, 0.45, 0.55)
+    npcs[0].path = []
+    npcs[0].path_index = 0
+    npcs[0].wait_until = 90.0
     if len(npcs) > 1:
         npcs[1].name = "alex"
         npcs[1].x = spawn_x + 35

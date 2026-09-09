@@ -156,17 +156,9 @@ def estimate_height_m(tags: dict) -> float:
 
 
 def height_colors(height: float) -> tuple[tuple[float, float, float], tuple[float, float, float]]:
-    """Return (wall_rgb, roof_rgb) — short / medium / skyscraper."""
-    if height < 12:  # ~1–3 stories
-        wall = (0.58, 0.60, 0.64)
-        roof = (0.66, 0.68, 0.72)
-    elif height < 45:  # ~4–12 stories
-        wall = (0.32, 0.37, 0.51)
-        roof = (0.40, 0.45, 0.58)
-    else:  # skyscraper
-        wall = (0.20, 0.26, 0.42)
-        roof = (0.28, 0.34, 0.50)
-    return wall, roof
+    """Return (wall_rgb, roof_rgb) from the NYC palette (kept for callers/tests)."""
+    style = style_from_tags({"building": "yes"}, height_m=height, variety_seed=f"{height:.0f}")
+    return style.wall, style.roof
 
 
 def _relation_polygons(index: OsmIndex, relation: dict) -> list[Polygon]:
@@ -228,7 +220,9 @@ def _polygon_to_building(
 
     footprint = tuple(lonlat_to_world_xz(projection, lon, lat) for lon, lat in ring)
     height = estimate_height_m(tags)
-    style = style_from_tags(tags, height_m=height)
+    cx = sum(p[0] for p in footprint) / len(footprint)
+    cz = sum(p[1] for p in footprint) / len(footprint)
+    style = style_from_tags(tags, height_m=height, variety_seed=f"{cx:.1f},{cz:.1f}")
     name = tags.get("name", "")
     facade_key, wikidata = facade_key_from_tags(tags)
     return Building3D.from_style(

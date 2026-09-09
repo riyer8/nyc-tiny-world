@@ -20,8 +20,6 @@ data/trajectories/*.jsonl
 # Live feed cache (refetched when --live-feeds is used)
 data/feeds/latest.json
 
-# Facade photos — run: python3 scripts/fetch_facades.py
-# manifest.json stays tracked as the index; images are downloaded locally.
-data/facades/*.jpg
+# Facade fetch cache (images themselves are shipped in data/facades/).
 data/facades/image_titles.json
 .cursor/

@@ -301,6 +301,9 @@ class QuestManager:
     def hud_objective_text(self) -> str | None:
         quest = self.active_quest
         if not quest:
+            starter = self.quests.get("missing_camera")
+            if starter and starter.id not in self.completed_quests:
+                return f"{starter.emoji} {starter.title}: Talk to Maya"
             if self.completed_quests:
                 return f"✓ {len(self.completed_quests)} quest(s) completed"
             return None

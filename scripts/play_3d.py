@@ -61,6 +61,7 @@ from pathlib import Path
 
 from nyc_world.core import World, World3D
 from nyc_world.game import CONTROLS_HELP_3D, GameSession, world_speed_multiplier
+from nyc_world.game.opening import apply_opening_beat, quest_marker_ids
 from nyc_world.game.controls import JumpState, MouseLook, movement_delta_3d, read_movement
 from nyc_world.game.player_avatar import PlayerAvatar, camera_facing_yaw
 from nyc_world.geo import build_minimap, locate_player
@@ -102,6 +103,16 @@ def _warmup_render_cache(
     print(f"Graphics cache ready ({len(visible)} nearby buildings).")
 
 
+def _save_gl_screenshot(path: Path, width: int, height: int) -> None:
+    from OpenGL.GL import GL_BACK, GL_RGBA, GL_UNSIGNED_BYTE, glReadBuffer, glReadPixels
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    glReadBuffer(GL_BACK)
+    pixels = glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE)
+    surf = pygame.image.fromstring(pixels, (width, height), "RGBA", True)
+    pygame.image.save(surf, str(path))
+
+
 def _set_mouse_look(active: bool) -> None:
     pygame.mouse.set_visible(not active)
     pygame.event.set_grab(active)
@@ -141,6 +152,25 @@ def main() -> None:
         choices=("fast", "normal"),
         default="fast",
         help="Graphics preset: fast (default, smoother) or normal (more detail)",
+    )
+    parser.add_argument(
+        "--screenshot",
+        type=Path,
+        default=None,
+        help="Render one frame to this PNG and exit",
+    )
+    parser.add_argument(
+        "--bench",
+        type=int,
+        default=0,
+        metavar="FRAMES",
+        help="Render N frames, print FPS, and exit",
+    )
+    parser.add_argument(
+        "--hour",
+        type=int,
+        default=None,
+        help="Pin the clock to this hour (0-23) for screenshots/demos",
     )
     args = parser.parse_args()
     graphics: GraphicsProfile = get_profile(args.graphics)
@@ -201,9 +231,17 @@ def main() -> None:
         if args.record:
             print("Recording trajectories to data/trajectories/")
         print(f"Graphics: {graphics.name} (use --graphics normal for more detail)")
-        print("Quest: Walk to Maya (pink NPC near spawn) and press E to start.")
+        if not session._loaded_position:
+            yaw = apply_opening_beat(session, px, pz, yaw)
+            session.update(px, pz, building_count=len(stream.render_buildings))
+            print("Maya is in front of you — she's mid-conversation. Press E to help.")
+        else:
+            print("Quest: Walk to Maya (pink NPC) and press E to continue.")
         print(CONTROLS_HELP_3D)
         print("Press G for location & simulation debug panel.")
+        if args.hour is not None:
+            stream.clock.hour = max(0, min(23, args.hour))
+            stream.clock.minute = 0
         stream.update_player(px, pz)
         _warmup_render_cache(world3d, stream, px, pz, graphics=graphics)
 
@@ -211,6 +249,8 @@ def main() -> None:
     running = True
     minimap_timer = 0.0
     minimap_interval = graphics.minimap_interval_s
+    bench_frames = 0
+    bench_started = pygame.time.get_ticks()
 
     while running:
         dt = min(clock.tick(FPS) / 1000.0, 0.05)
@@ -482,6 +522,7 @@ def main() -> None:
                 photo=session.photo if session else None,
                 minds=session.simulation.minds if session else None,
                 selected_id=session.twin.selected_id if session and session.in_twin else None,
+                quest_markers=quest_marker_ids(session) if session else None,
             )
 
         if session and world.projection and stream:
@@ -539,7 +580,8 @@ def main() -> None:
                     minimap_timer = 0.0
             else:
                 session.hud.minimap = None
-            draw_hud(width, height, session.hud)
+            if not args.bench:
+                draw_hud(width, height, session.hud)
 
             speed = "SPRINT" if movement.sprint else "walk"
             look = "look" if mouse_look.active else "locked"
@@ -553,11 +595,23 @@ def main() -> None:
                 f"{session.quest_summary()}"
             )
 
+        if args.screenshot:
+            _save_gl_screenshot(args.screenshot, width, height)
+            print(f"Wrote {args.screenshot}")
+            running = False
         pygame.display.flip()
 
+        if args.bench:
+            bench_frames += 1
+            if bench_frames >= args.bench:
+                elapsed = max(0.001, (pygame.time.get_ticks() - bench_started) / 1000.0)
+                print(f"Bench: {bench_frames} frames in {elapsed:.2f}s — {bench_frames / elapsed:.1f} FPS")
+                running = False
+
     if session:
-        session.save(px, pz)
-        print(f"Saved game to {session.save_path}")
+        if not args.screenshot and not args.bench:
+            session.save(px, pz)
+            print(f"Saved game to {session.save_path}")
         session.close()
     pygame.quit()
 

@@ -48,32 +48,6 @@ def setup_gl(width: int, height: int, fov: float = 70.0) -> None:
     # Manual per-vertex colors — fixed-function lighting is slower and redundant here.
 
 
-def _enable_scene_lighting() -> None:
-    """Soft directional light so buildings and characters have readable depth."""
-    from OpenGL.GL import (
-        GL_AMBIENT,
-        GL_AMBIENT_AND_DIFFUSE,
-        GL_COLOR_MATERIAL,
-        GL_DIFFUSE,
-        GL_FRONT_AND_BACK,
-        GL_LIGHT0,
-        GL_LIGHTING,
-        GL_POSITION,
-        GLfloat,
-        glColorMaterial,
-        glEnable,
-        glLightfv,
-    )
-
-    glEnable(GL_LIGHTING)
-    glEnable(GL_LIGHT0)
-    glEnable(GL_COLOR_MATERIAL)
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE)
-    glLightfv(GL_LIGHT0, GL_AMBIENT, (GLfloat * 4)(0.35, 0.35, 0.38, 1.0))
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, (GLfloat * 4)(0.72, 0.70, 0.66, 1.0))
-    glLightfv(GL_LIGHT0, GL_POSITION, (GLfloat * 4)(0.45, 0.85, 0.35, 0.0))
-
-
 def apply_environment(clock: WorldClock) -> None:
     from OpenGL.GL import glClearColor, glFogf, glFogi, glEnable, glDisable, GL_FOG, GL_EXP2
 
@@ -88,6 +62,112 @@ def apply_environment(clock: WorldClock) -> None:
         glFogf(0x0B63, density * 0.5)
     else:
         glDisable(GL_FOG)
+
+
+def _lerp_rgb(
+    a: tuple[float, float, float],
+    b: tuple[float, float, float],
+    t: float,
+) -> tuple[float, float, float]:
+    return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t)
+
+
+def draw_sky(clock: WorldClock, px: float, pz: float, *, radius: float = 900.0) -> None:
+    """Vertical gradient dome that follows the player and tracks time of day."""
+    from OpenGL.GL import (
+        GL_CULL_FACE,
+        GL_FOG,
+        GL_QUAD_STRIP,
+        glBegin,
+        glColor3f,
+        glDepthMask,
+        glDisable,
+        glEnable,
+        glEnd,
+        glVertex3f,
+    )
+
+    horizon, zenith = clock.sky_gradient()
+    glDisable(GL_FOG)
+    glDisable(GL_CULL_FACE)
+    glDepthMask(False)
+    rings = 6
+    slices = 20
+    for i in range(rings):
+        t0 = i / rings
+        t1 = (i + 1) / rings
+        elev0 = t0 * math.pi * 0.5
+        elev1 = t1 * math.pi * 0.5
+        y0 = math.sin(elev0) * radius
+        y1 = math.sin(elev1) * radius
+        r0 = math.cos(elev0) * radius
+        r1 = math.cos(elev1) * radius
+        # Bias toward the horizon so the city silhouette reads against sky.
+        c0 = _lerp_rgb(horizon, zenith, t0 ** 0.65)
+        c1 = _lerp_rgb(horizon, zenith, t1 ** 0.65)
+        glBegin(GL_QUAD_STRIP)
+        for s in range(slices + 1):
+            ang = 2.0 * math.pi * s / slices
+            ca, sa = math.cos(ang), math.sin(ang)
+            glColor3f(*c0)
+            glVertex3f(px + r0 * ca, y0, pz + r0 * sa)
+            glColor3f(*c1)
+            glVertex3f(px + r1 * ca, y1, pz + r1 * sa)
+        glEnd()
+    glDepthMask(True)
+    glEnable(GL_CULL_FACE)
+    if clock.fog_density() > 0:
+        glEnable(GL_FOG)
+
+
+def building_ao_params(height: float) -> tuple[float, float]:
+    """Pad (meters) and alpha for baked-looking AO under a building."""
+    pad = min(10.0, 1.6 + height * 0.035)
+    alpha = min(0.38, 0.10 + height * 0.0018)
+    return pad, alpha
+
+
+def draw_building_ao(buildings: list[Building3D], brightness: float = 1.0) -> None:
+    """Darken the ground around each building base — cheap contact shadow."""
+    if not buildings:
+        return
+    from OpenGL.GL import (
+        GL_BLEND,
+        GL_ONE_MINUS_SRC_ALPHA,
+        GL_QUADS,
+        GL_SRC_ALPHA,
+        glBegin,
+        glBlendFunc,
+        glColor4f,
+        glDisable,
+        glEnable,
+        glEnd,
+        glVertex3f,
+    )
+
+    glEnable(GL_BLEND)
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    for building in buildings:
+        xs = [p[0] for p in building.footprint]
+        zs = [p[1] for p in building.footprint]
+        if not xs:
+            continue
+        pad, alpha = building_ao_params(building.height)
+        x0, x1 = min(xs) - pad, max(xs) + pad
+        z0, z1 = min(zs) - pad, max(zs) + pad
+        glColor4f(0.0, 0.0, 0.0, alpha * min(1.0, 0.45 + 0.55 * brightness))
+        glBegin(GL_QUADS)
+        glVertex3f(x0, 0.03, z0)
+        glVertex3f(x1, 0.03, z0)
+        glVertex3f(x1, 0.03, z1)
+        glVertex3f(x0, 0.03, z1)
+        glEnd()
+    glDisable(GL_BLEND)
+
+
+def _draw_quest_marker(x: float, y: float, z: float) -> None:
+    draw_box(Box3D(x, y, z, 0.28, 0.45, 0.28, 1.0, 0.82, 0.15))
+    draw_box(Box3D(x, y + 0.55, z, 0.18, 0.18, 0.18, 1.0, 0.88, 0.2))
 
 
 def _draw_quad(q: Quad) -> None:
@@ -338,6 +418,7 @@ def render_frame(
     photo=None,
     minds=None,
     selected_id: str | None = None,
+    quest_markers: list[str] | None = None,
 ) -> None:
     from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear, glLoadIdentity
 
@@ -359,12 +440,18 @@ def render_frame(
             px, py, pz, yaw, pitch, camera_footprint=camera_footprint
         )
 
+    draw_sky(render_clock, px, pz)
+
     building_details = classify_building_details(buildings, px, pz)
     visible_buildings = cull_buildings(
         buildings, px, pz, max_radius_m=building_draw_radius_m
     )
     if streets:
         draw_streets(streets, bright)
+    draw_building_ao(
+        [b for b in visible_buildings if building_details.get(id(b)) in ("full", "medium")],
+        bright,
+    )
     from OpenGL.GL import GL_CULL_FACE, glDisable, glEnable
 
     glDisable(GL_CULL_FACE)
@@ -397,6 +484,8 @@ def render_frame(
             draw_npc(npc, bright)
         if selected_id and npc.name == selected_id:
             _draw_selection_marker(npc.x, 2.5, npc.z)
+        elif quest_markers and npc.name in quest_markers:
+            _draw_quest_marker(npc.x, 2.7, npc.z)
     for i, vehicle in enumerate(vehicles):
         draw_vehicle(vehicle, bright)
         if selected_id and selected_id == f"vehicle_{i}":

@@ -91,6 +91,26 @@ class WorldClock:
             return (0.53 - 0.2 * p, 0.45 - 0.15 * p, 0.7 - 0.3 * p)
         return (0.08, 0.10, 0.22)
 
+    def sky_gradient(self) -> tuple[tuple[float, float, float], tuple[float, float, float]]:
+        """Horizon and zenith colors for a vertical sky dome."""
+        horizon = self.sky_color()
+        t = self.hour + self.minute / 60.0
+        if self.weather == Weather.RAIN:
+            zenith = (0.28, 0.30, 0.34)
+        elif self.weather == Weather.FOG:
+            zenith = (0.50, 0.51, 0.54)
+        elif self.weather == Weather.CLOUDY:
+            zenith = (0.45, 0.50, 0.58)
+        elif self.is_night:
+            zenith = (0.02, 0.03, 0.10)
+        elif 6 <= t < 8:
+            zenith = (0.22, 0.34, 0.62)
+        elif 18 <= t < 20:
+            zenith = (0.10, 0.12, 0.30)
+        else:
+            zenith = (0.20, 0.42, 0.80)
+        return horizon, zenith
+
     def ambient_brightness(self) -> float:
         t = self.hour + self.minute / 60.0
         if self.is_night:

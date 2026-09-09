@@ -41,6 +41,16 @@ def test_facade_cache_manifest(tmp_path: Path) -> None:
     assert not cache.has("Q999")
 
 
+def test_shipped_facade_images_match_manifest() -> None:
+    from nyc_world.paths import FACADES_DIR
+
+    reset_facade_cache()
+    cache = FacadeCache(FACADES_DIR)
+    assert len(cache.manifest) >= 10
+    missing = [key for key in cache.manifest if not cache.has(key)]
+    assert missing == []
+
+
 def test_building_carries_facade_key() -> None:
     building = Building3D(
         footprint=((0, 0), (10, 0), (10, 10), (0, 10)),
