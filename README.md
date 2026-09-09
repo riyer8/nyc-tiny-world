@@ -42,6 +42,11 @@ python3 scripts/play_3d.py --bench 180
 
 Record 30 seconds from spawn (Maya → cafe on MacDougal). Photo mode (**P**, then **Enter**) writes PNGs to `data/screenshots/`.
 
+## License
+
+Code is MIT licensed. Wikimedia facade photos are tracked in `data/facades/`
+with source links in `data/facades/ATTRIBUTION.md`.
+
 More: [docs/](docs/)
 
 ---
